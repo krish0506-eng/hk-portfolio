@@ -44,13 +44,7 @@
 
 html { scroll-behavior: smooth; }
 
-html[data-depth-mode="high"] {
-  --depth-perspective: 1550px;
-}
-
-html[data-depth-mode="lite"] {
-  --depth-perspective: 1100px;
-}
+/* depth-mode attributes kept for backwards compat but no longer drive 3D */
 
 body {
   background:
@@ -71,19 +65,36 @@ section {
 }
 
 main {
-  perspective: var(--depth-perspective, 1400px);
-  perspective-origin: 50% 46%;
-  transform-style: preserve-3d;
+  /* 2D layout — no 3D perspective */
 }
 
-.depth-section {
-  transform-style: preserve-3d;
-  will-change: transform, filter, opacity;
-  transition: transform 280ms cubic-bezier(0.2, 0.8, 0.2, 1), filter 280ms ease, opacity 280ms ease;
+/* ── 2D Scroll-reveal section classes ───────────────────────────────────────── */
+.sr-section {
+  opacity: 0;
+  transform: translateY(56px) scale(0.985);
+  transition:
+    opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
 }
 
-.depth-control select {
-  border: 1px solid rgb(var(--color-border) / 0.55);
+.sr-section.sr-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Stagger for data-sr-child elements */
+[data-sr-child] {
+  opacity: 0;
+  transform: translateY(32px);
+  transition:
+    opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-sr-child].sr-visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 section::before {
@@ -331,14 +342,10 @@ body::after {
     scroll-behavior: auto !important;
   }
 
-  main {
-    perspective: none;
-  }
-
-  .depth-section {
-    transform: none !important;
-    filter: none !important;
+  .sr-section,
+  [data-sr-child] {
     opacity: 1 !important;
+    transform: none !important;
     transition: none !important;
   }
 }
