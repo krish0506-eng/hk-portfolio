@@ -13,12 +13,13 @@ function ParticleField() {
   const geometry = useMemo(() => {
     const geo = new THREE.BufferGeometry();
     const positions = new Float32Array(count * 3);
-    const colors = new Float32Array(count * 3);
+    const colors    = new Float32Array(count * 3);
     const palette = [
-      new THREE.Color("#5ea3ff"),
-      new THREE.Color("#ff6b9d"),
-      new THREE.Color("#00f5ff"),
-      new THREE.Color("#ffd700"),
+      new THREE.Color("#8b5cf6"),  // violet
+      new THREE.Color("#06b6d4"),  // cyan
+      new THREE.Color("#d946ef"),  // fuchsia
+      new THREE.Color("#f59e0b"),  // amber
+      new THREE.Color("#4f8eff"),  // blue
     ];
     for (let i = 0; i < count; i++) {
       positions[i * 3]     = (Math.random() - 0.5) * 18;
@@ -44,10 +45,10 @@ function ParticleField() {
   return (
     <points ref={ref} geometry={geometry}>
       <pointsMaterial
-        size={0.022}
+        size={0.025}
         vertexColors
         transparent
-        opacity={0.55}
+        opacity={0.65}
         sizeAttenuation
         depthWrite={false}
       />
@@ -104,13 +105,13 @@ function DNAHelix({ progress }: { progress: number }) {
   return (
     <group ref={ref} position={[-3.2, 0.5, -4.5]}>
       <points geometry={geo1}>
-        <pointsMaterial size={0.06} color="#00f5ff" transparent opacity={0.8} sizeAttenuation />
+        <pointsMaterial size={0.07} color="#06b6d4" transparent opacity={0.85} sizeAttenuation />
       </points>
       <points geometry={geo2}>
-        <pointsMaterial size={0.06} color="#ff2d78" transparent opacity={0.8} sizeAttenuation />
+        <pointsMaterial size={0.07} color="#d946ef" transparent opacity={0.85} sizeAttenuation />
       </points>
       <lineSegments geometry={connGeo}>
-        <lineBasicMaterial color="#5ea3ff" transparent opacity={0.3} />
+        <lineBasicMaterial color="#8b5cf6" transparent opacity={0.35} />
       </lineSegments>
     </group>
   );
@@ -121,7 +122,7 @@ function WireframeCube({
   position,
   speed,
   scale,
-  color = "#6c63ff",
+  color = "#8b5cf6",
 }: {
   position: [number, number, number];
   speed: number;
@@ -139,8 +140,48 @@ function WireframeCube({
   return (
     <mesh ref={ref} position={position} scale={scale}>
       <boxGeometry args={[1, 1, 1]} />
-      <meshBasicMaterial color={color} wireframe transparent opacity={0.32} />
+      <meshBasicMaterial color={color} wireframe transparent opacity={0.35} />
     </mesh>
+  );
+}
+
+// ─── Animated orbit ring ─────────────────────────────────────────────────────
+function OrbitRing({
+  radius,
+  color,
+  speed,
+  tilt,
+}: {
+  radius: number;
+  color: string;
+  speed: number;
+  tilt: [number, number, number];
+}) {
+  const ref = useRef<THREE.Mesh>(null);
+  const dotRef = useRef<THREE.Mesh>(null);
+  const t = useRef(Math.random() * Math.PI * 2);
+
+  useFrame((_, delta) => {
+    if (ref.current) ref.current.rotation.y += delta * speed;
+    t.current += delta * speed * 2;
+    if (dotRef.current) {
+      dotRef.current.position.x = Math.cos(t.current) * radius;
+      dotRef.current.position.z = Math.sin(t.current) * radius;
+    }
+  });
+
+  return (
+    <group rotation={tilt}>
+      <mesh ref={ref}>
+        <torusGeometry args={[radius, 0.015, 12, 120]} />
+        <meshBasicMaterial color={color} transparent opacity={0.30} />
+      </mesh>
+      {/* Orbiting glowing dot */}
+      <mesh ref={dotRef} position={[radius, 0, 0]}>
+        <sphereGeometry args={[0.06, 8, 8]} />
+        <meshStandardMaterial color={color} emissive={color} emissiveIntensity={2.5} />
+      </mesh>
+    </group>
   );
 }
 
@@ -159,11 +200,11 @@ function SceneCore({ progress, reducedMotion }: { progress: number; reducedMotio
 
   const orbs = useMemo<OrbData[]>(
     () => [
-      { position: [-2.4,  1.4, -1.8], scale: 0.42, color: "#5ea3ff", speed: 0.8 },
-      { position: [ 2.3, -1.2, -1.3], scale: 0.56, color: "#ffb86b", speed: 1.1 },
-      { position: [ 1.8,  1.8, -2.1], scale: 0.34, color: "#9ee493", speed: 0.7 },
-      { position: [-1.5, -1.9, -2.4], scale: 0.30, color: "#f792c2", speed: 1.3 },
-      { position: [ 0.1,  2.2, -1.6], scale: 0.26, color: "#8bd3dd", speed: 0.9 },
+      { position: [-2.4,  1.4, -1.8], scale: 0.38, color: "#8b5cf6", speed: 0.8 },
+      { position: [ 2.3, -1.2, -1.3], scale: 0.52, color: "#f59e0b", speed: 1.1 },
+      { position: [ 1.8,  1.8, -2.1], scale: 0.30, color: "#06b6d4", speed: 0.7 },
+      { position: [-1.5, -1.9, -2.4], scale: 0.28, color: "#d946ef", speed: 1.3 },
+      { position: [ 0.1,  2.2, -1.6], scale: 0.22, color: "#10b981", speed: 0.9 },
     ],
     [],
   );
@@ -181,14 +222,14 @@ function SceneCore({ progress, reducedMotion }: { progress: number; reducedMotio
       rig.current.rotation.y, targetY + progress * 0.4, 0.06,
     );
 
-    mainShape.current.rotation.x += delta * 0.12;
-    mainShape.current.rotation.y += delta * 0.20;
+    mainShape.current.rotation.x += delta * 0.10;
+    mainShape.current.rotation.y += delta * 0.18;
 
     if (!reducedMotion) {
       rig.current.position.y = THREE.MathUtils.lerp(
         rig.current.position.y, -progress * 0.9, 0.04,
       );
-      // Subtle camera zoom driven by scroll
+      // Scroll-driven camera zoom
       (camera as THREE.PerspectiveCamera).position.z = THREE.MathUtils.lerp(
         (camera as THREE.PerspectiveCamera).position.z,
         6 - progress * 1.4,
@@ -199,14 +240,16 @@ function SceneCore({ progress, reducedMotion }: { progress: number; reducedMotio
 
   return (
     <>
-      <color attach="background" args={["#060a12"]} />
-      <fog attach="fog" args={["#060a12", 5, 18]} />
+      <color attach="background" args={["#030712"]} />
+      <fog attach="fog" args={["#030712", 5, 20]} />
 
-      <ambientLight intensity={0.5} />
-      <directionalLight position={[4, 4, 2]} intensity={1.2} color="#b8d7ff" />
-      <pointLight position={[-3, -2, 2]} intensity={1.4} color="#ffcf96" />
-      <pointLight position={[3, 3, -2]} intensity={0.8} color="#6c63ff" />
-      <pointLight position={[0, -4, 3]} intensity={0.6} color="#00f5ff" />
+      {/* Rich neon lighting */}
+      <ambientLight intensity={0.45} />
+      <directionalLight position={[4, 4, 2]} intensity={1.0} color="#c4b5fd" />
+      <pointLight position={[-3, -2, 2]} intensity={1.6} color="#f59e0b" distance={12} />
+      <pointLight position={[3,  3, -2]} intensity={1.0} color="#8b5cf6" distance={10} />
+      <pointLight position={[0, -4,  3]} intensity={0.8} color="#06b6d4" distance={10} />
+      <pointLight position={[-2, 2,  4]} intensity={0.6} color="#d946ef" distance={8}  />
 
       {/* Background particles */}
       {!reducedMotion && <ParticleField />}
@@ -217,9 +260,9 @@ function SceneCore({ progress, reducedMotion }: { progress: number; reducedMotio
       {/* Wireframe accent cubes */}
       {!reducedMotion && (
         <>
-          <WireframeCube position={[ 3.8, -1.5, -3.5]} speed={0.50} scale={0.60} color="#6c63ff" />
-          <WireframeCube position={[-4.0,  2.0, -5.0]} speed={0.35} scale={0.80} color="#00f5ff" />
-          <WireframeCube position={[ 4.5,  2.5, -6.0]} speed={0.45} scale={0.50} color="#ff2d78" />
+          <WireframeCube position={[ 3.8, -1.5, -3.5]} speed={0.50} scale={0.60} color="#8b5cf6" />
+          <WireframeCube position={[-4.0,  2.0, -5.0]} speed={0.35} scale={0.80} color="#06b6d4" />
+          <WireframeCube position={[ 4.5,  2.5, -6.0]} speed={0.45} scale={0.50} color="#d946ef" />
         </>
       )}
 
@@ -229,14 +272,14 @@ function SceneCore({ progress, reducedMotion }: { progress: number; reducedMotio
           <mesh ref={mainShape}>
             <icosahedronGeometry args={[1.35, 6]} />
             <meshPhysicalMaterial
-              color="#c5ddff"
-              roughness={0.12}
-              metalness={0.35}
-              transmission={0.70}
-              thickness={1.10}
+              color="#c4b5fd"
+              roughness={0.08}
+              metalness={0.40}
+              transmission={0.65}
+              thickness={1.20}
               clearcoat={1}
               clearcoatRoughness={0.04}
-              envMapIntensity={1.2}
+              envMapIntensity={1.4}
             />
           </mesh>
         </Float>
@@ -244,8 +287,8 @@ function SceneCore({ progress, reducedMotion }: { progress: number; reducedMotio
         {/* Outer wireframe shell */}
         <Float speed={0.8} rotationIntensity={0.2} floatIntensity={0.2}>
           <mesh>
-            <icosahedronGeometry args={[1.65, 1]} />
-            <meshBasicMaterial color="#6c63ff" wireframe transparent opacity={0.08} />
+            <icosahedronGeometry args={[1.7, 1]} />
+            <meshBasicMaterial color="#8b5cf6" wireframe transparent opacity={0.10} />
           </mesh>
         </Float>
 
@@ -259,30 +302,41 @@ function SceneCore({ progress, reducedMotion }: { progress: number; reducedMotio
             position={orb.position}
           >
             <mesh scale={orb.scale}>
-              <sphereGeometry args={[1, 32, 32]} />
+              <sphereGeometry args={[1, 24, 24]} />
               <meshStandardMaterial
                 color={orb.color}
                 emissive={orb.color}
-                emissiveIntensity={0.45}
-                roughness={0.3}
+                emissiveIntensity={0.60}
+                roughness={0.25}
+                metalness={0.2}
               />
             </mesh>
           </Float>
         ))}
 
-        {/* Orbit rings */}
-        <mesh position={[0, 0, -2.8]} rotation={[Math.PI / 3.4, 0, 0]}>
-          <torusGeometry args={[3.1, 0.03, 20, 180]} />
-          <meshBasicMaterial color="#9cb6d6" transparent opacity={0.35} />
-        </mesh>
-        <mesh position={[0, 0, -2.8]} rotation={[Math.PI / 2, Math.PI / 4, 0]}>
-          <torusGeometry args={[2.6, 0.02, 16, 120]} />
-          <meshBasicMaterial color="#6c63ff" transparent opacity={0.20} />
-        </mesh>
-        <mesh position={[0, 0, -2.8]} rotation={[0, Math.PI / 3, Math.PI / 6]}>
-          <torusGeometry args={[3.6, 0.015, 12, 100]} />
-          <meshBasicMaterial color="#00f5ff" transparent opacity={0.15} />
-        </mesh>
+        {/* Animated orbit rings with glowing dots */}
+        {!reducedMotion && (
+          <>
+            <OrbitRing
+              radius={3.1}
+              color="#8b5cf6"
+              speed={0.28}
+              tilt={[Math.PI / 3.4, 0, 0]}
+            />
+            <OrbitRing
+              radius={2.5}
+              color="#06b6d4"
+              speed={0.40}
+              tilt={[Math.PI / 2, Math.PI / 4, 0]}
+            />
+            <OrbitRing
+              radius={3.7}
+              color="#d946ef"
+              speed={0.18}
+              tilt={[0.3, Math.PI / 3, Math.PI / 6]}
+            />
+          </>
+        )}
       </group>
     </>
   );
@@ -319,7 +373,8 @@ export default function ThreeBackdrop() {
         <SceneCore progress={progress} reducedMotion={reducedMotion} />
       </Canvas>
 
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_15%,rgba(151,196,255,0.18),transparent_35%),radial-gradient(circle_at_78%_72%,rgba(255,183,125,0.16),transparent_32%),linear-gradient(180deg,rgba(4,8,16,0.25),rgba(6,10,18,0.70))]" />
+      {/* Gradient overlay */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_15%,rgba(139,92,246,0.14),transparent_35%),radial-gradient(circle_at_78%_72%,rgba(6,182,212,0.10),transparent_32%),linear-gradient(180deg,rgba(3,7,18,0.20),rgba(3,7,18,0.68))]" />
     </div>
   );
 }
