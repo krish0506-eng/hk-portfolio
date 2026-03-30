@@ -138,7 +138,7 @@ export default function ThreeBackdrop() {
     draw();
 
     return () => {
-      cancelAnimationFrame(animId);
+      if (animId !== null) cancelAnimationFrame(animId);
       window.removeEventListener("resize", onResize);
       window.removeEventListener("mousemove", onMouseMove);
       motionQuery.removeEventListener("change", onMotionChange);
