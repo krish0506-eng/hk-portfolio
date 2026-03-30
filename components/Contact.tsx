@@ -158,7 +158,7 @@ export default function Contact() {
               disabled={sending}
               whileHover={{ scale: 1.02, boxShadow: "0 0 30px rgba(108,99,255,0.4)" }}
               whileTap={{ scale: 0.98 }}
-              className="w-full py-4 rounded-xl font-body font-medium text-white flex items-center justify-center gap-2 disabled:opacity-70"
+              className="w-full py-4 rounded-xl font-body font-medium text-white flex items-center justify-center gap-2 disabled:opacity-70 shadow-lg shadow-accent/25 hover:shadow-accent/40 transition-shadow duration-300"
               style={{ background: "linear-gradient(135deg, #6c63ff, #00f5ff)" }}
             >
               {sending ? (

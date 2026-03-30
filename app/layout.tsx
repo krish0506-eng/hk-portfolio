@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Toaster } from "sonner";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 export const metadata: Metadata = {
   title: "Hari Krishnaa N — Agentic AI Engineer & Vibe Designer",
@@ -11,10 +12,12 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en" className="scroll-smooth dark">
       <body className="noise">
-        {children}
-        <Toaster position="bottom-right" theme="dark" />
+        <ThemeProvider>
+          {children}
+          <Toaster position="bottom-right" theme="dark" />
+        </ThemeProvider>
       </body>
     </html>
   );

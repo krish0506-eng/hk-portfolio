@@ -122,7 +122,7 @@ export default function Skills() {
               whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.92 }}
               onClick={() => scrollBy(-1)}
               disabled={!canScrollLeft}
-              className="w-11 h-11 rounded-full glass glow-border flex items-center justify-center transition-all disabled:opacity-30"
+              className="neu-btn w-11 h-11 rounded-full flex items-center justify-center transition-all disabled:opacity-30"
               aria-label="Previous skill"
             >
               <FiChevronLeft size={20} className="text-light" />
@@ -131,7 +131,7 @@ export default function Skills() {
               whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.92 }}
               onClick={() => scrollBy(1)}
               disabled={!canScrollRight}
-              className="w-11 h-11 rounded-full glass glow-border flex items-center justify-center transition-all disabled:opacity-30"
+              className="neu-btn w-11 h-11 rounded-full flex items-center justify-center transition-all disabled:opacity-30"
               aria-label="Next skill"
             >
               <FiChevronRight size={20} className="text-light" />

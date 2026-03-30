@@ -194,7 +194,7 @@ export default function Hero() {
               whileHover={{ y: -2 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" })}
-              className="rounded-full bg-accent px-7 py-3.5 font-body text-sm font-semibold text-bg"
+              className="rounded-full bg-accent px-7 py-3.5 font-body text-sm font-semibold text-bg shadow-lg shadow-accent/30 hover:shadow-accent/50 transition-shadow duration-300"
             >
               View My Work
             </motion.button>
@@ -202,7 +202,7 @@ export default function Hero() {
               whileHover={{ y: -2 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
-              className="rounded-full border border-border bg-surface/80 px-7 py-3.5 font-body text-sm font-semibold text-light"
+              className="neu-btn rounded-full px-7 py-3.5 font-body text-sm font-semibold text-light"
             >
               Get In Touch
             </motion.button>
