@@ -158,7 +158,90 @@ section::before {
   cursor: none;
 }
 
-/* Reduced Motion Support (Idea 147) */
+/* ─── Glitch animations ──────────────────────────────────────────────────── */
+@keyframes glitch-flicker {
+  0%,  84%  { filter: none; transform: none; }
+  85%        { filter: hue-rotate(90deg) saturate(3) brightness(1.5);
+               transform: translate(-2px, 0); }
+  86%        { filter: none; transform: none; }
+  88%        { filter: hue-rotate(-60deg) saturate(2);
+               transform: translate(2px, -1px); }
+  89%        { filter: none; transform: none; }
+  92%        { filter: hue-rotate(180deg) saturate(4) brightness(0.7);
+               transform: translate(-1px, 1px); }
+  93%, 100%  { filter: none; transform: none; }
+}
+
+@keyframes glitch-clip-1 {
+  0%,  88%  { clip-path: inset(0 0 100% 0); transform: none; }
+  90%        { clip-path: inset(18% 0 58% 0); transform: translate(-3px, 0); }
+  91%        { clip-path: inset(68% 0  8% 0); transform: translate( 3px, 0); }
+  92%        { clip-path: inset(38% 0 38% 0); transform: translate(-2px, 0); }
+  93%, 100%  { clip-path: inset(0 0 100% 0); transform: none; }
+}
+
+@keyframes glitch-clip-2 {
+  0%,  82%  { clip-path: inset(100% 0 0 0); transform: none; }
+  84%        { clip-path: inset(52% 0 30% 0); transform: translate( 3px, 0); }
+  85%        { clip-path: inset( 8% 0 72% 0); transform: translate(-3px, 0); }
+  86%        { clip-path: inset(82% 0  5% 0); transform: translate( 2px, 0); }
+  87%, 100%  { clip-path: inset(100% 0 0 0); transform: none; }
+}
+
+@keyframes orbit-ring {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes orbit-ring-rev {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(-360deg); }
+}
+
+/* Glitch on filter-compatible text (e.g. gradient-text, logo) */
+.glitch-anim {
+  animation: glitch-flicker 7s infinite;
+}
+
+/* Glitch with colour-channel slice (for solid-colour text via data-text) */
+.glitch-text {
+  position: relative;
+  display: inline-block;
+}
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+}
+.glitch-text::before {
+  color: #00f5ff;
+  animation: glitch-clip-1 6s infinite steps(1);
+}
+.glitch-text::after {
+  color: #ff2d78;
+  animation: glitch-clip-2 7s infinite steps(1);
+}
+
+/* Scanline raster overlay */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(0, 0, 0, 0.04) 3px,
+    rgba(0, 0, 0, 0.04) 4px
+  );
+  pointer-events: none;
+  z-index: 997;
+}
+
+/* Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
