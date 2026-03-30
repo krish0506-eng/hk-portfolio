@@ -32,7 +32,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         <motion.div
           whileHover={{ scale: 1.05 }}
-          className="font-display font-bold text-3xl gradient-text cursor-pointer"
+          className="font-display font-bold text-3xl gradient-text glitch-anim cursor-pointer"
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         >
           HK<span className="text-accent">.</span>

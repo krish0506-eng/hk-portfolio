@@ -1,5 +1,5 @@
 "use client";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { TypeAnimation } from "react-type-animation";
 import { FiGithub, FiLinkedin, FiMail } from "react-icons/fi";
 import { HiArrowDown } from "react-icons/hi";
@@ -58,6 +58,7 @@ const headlineLines = [
 ];
 
 export default function Hero() {
+  const prefersReducedMotion = useReducedMotion();
   // Manifesto & brand trust signals (Ideas 1, 14, 27)
   const manifesto = "Ship useful products that solve real problems.";
   const trustPhrase = "No fluff, practical delivery only.";
@@ -214,12 +215,32 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 0.5 }}
           className="glass rounded-3xl border border-border p-5"
         >
-          <div className="mx-auto mb-4 flex h-36 w-36 items-center justify-center rounded-full border-2 border-dashed border-border bg-card/80">
-            <span className="text-center font-mono text-[10px] uppercase tracking-wider text-muted">
-              Your Photo
-              <br />
-              Placeholder
-            </span>
+          {/* Animated 3D-style avatar replacing the blank placeholder */}
+          <div className="mx-auto mb-4 relative flex h-36 w-36 items-center justify-center">
+            {/* Pulsing outer ring */}
+            <motion.div
+              className="absolute inset-0 rounded-full border border-accent/30"
+              animate={prefersReducedMotion ? {} : { scale: [1, 1.12, 1], opacity: [0.5, 0.15, 0.5] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            />
+            {/* Orbiting ring 1 */}
+            <div
+              className="absolute inset-1 rounded-full border border-cyan/25"
+              style={prefersReducedMotion ? undefined : { animation: "orbit-ring 8s linear infinite" }}
+            >
+              <div className="absolute -top-1 left-1/2 -translate-x-1/2 h-2 w-2 rounded-full bg-cyan/70" />
+            </div>
+            {/* Orbiting ring 2 — reverse */}
+            <div
+              className="absolute inset-4 rounded-full border border-pink/20"
+              style={prefersReducedMotion ? undefined : { animation: "orbit-ring-rev 12s linear infinite" }}
+            >
+              <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 h-1.5 w-1.5 rounded-full bg-pink/60" />
+            </div>
+            {/* Core avatar disc */}
+            <div className="relative z-10 flex h-24 w-24 items-center justify-center rounded-full border-2 border-accent/50 bg-gradient-to-br from-accent/20 via-card to-cyan/10">
+              <span className="font-display font-bold text-4xl gradient-text glitch-anim">HK</span>
+            </div>
           </div>
 
           {/* Hero Proof Row (Idea 27) */}

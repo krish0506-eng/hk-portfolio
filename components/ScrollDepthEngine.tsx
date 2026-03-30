@@ -64,16 +64,16 @@ export default function ScrollDepthEngine() {
         const clamped = Math.max(-1.25, Math.min(1.25, distance));
         const near = 1 - Math.min(Math.abs(clamped), 1);
 
-        const translateY = clamped * -36 * modeFactor;
-        const translateZ = -Math.abs(clamped) * 220 * modeFactor + near * 40 * modeFactor;
-        const rotateX = clamped * -9 * modeFactor;
-        const rotateY = ((i % 2 === 0 ? 1 : -1) * clamped * 5) * modeFactor;
-        const scale = 0.9 + near * 0.1;
-        const blur = (1 - near) * (isLite ? 0.4 : 1.2);
+        const translateY = clamped * -28 * modeFactor;
+        const translateZ = -Math.abs(clamped) * 180 * modeFactor + near * 36 * modeFactor;
+        const rotateX = clamped * -7 * modeFactor;
+        const rotateY = ((i % 2 === 0 ? 1 : -1) * clamped * 4) * modeFactor;
+        const scale = 0.92 + near * 0.08;
+        const blur = (1 - near) * (isLite ? 0.3 : 0.8);
 
         section.style.transform = `translate3d(0, ${translateY.toFixed(2)}px, ${translateZ.toFixed(2)}px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale(${scale.toFixed(3)})`;
         section.style.filter = `blur(${blur.toFixed(2)}px)`;
-        section.style.opacity = String((0.7 + near * 0.3).toFixed(3));
+        section.style.opacity = String((0.82 + near * 0.18).toFixed(3));
       }
     };
 
