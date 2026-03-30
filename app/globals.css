@@ -1,0 +1,182 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Jost:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-bg: 8 12 20;
+  --color-surface: 255 255 255;
+  --color-card: 239 241 245;
+  --color-border: 202 208 216;
+  --color-accent: 17 24 39;
+  --color-cyan: 75 85 99;
+  --color-pink: 107 114 128;
+  --color-gold: 31 41 55;
+  --color-muted: 71 85 105;
+  --color-light: 15 23 42;
+  --glass-bg: rgba(255, 255, 255, 0.72);
+  --glass-border: rgba(15, 23, 42, 0.1);
+  --selection-bg: rgba(15, 23, 42, 0.15);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: 8 12 20;
+    --color-surface: 15 15 18;
+    --color-card: 23 23 27;
+    --color-border: 63 63 70;
+    --color-accent: 244 244 245;
+    --color-cyan: 161 161 170;
+    --color-pink: 113 113 122;
+    --color-gold: 228 228 231;
+    --color-muted: 161 161 170;
+    --color-light: 245 245 245;
+    --glass-bg: rgba(18, 18, 22, 0.72);
+    --glass-border: rgba(245, 245, 245, 0.12);
+    --selection-bg: rgba(245, 245, 245, 0.18);
+  }
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+html[data-depth-mode="high"] {
+  --depth-perspective: 1550px;
+}
+
+html[data-depth-mode="lite"] {
+  --depth-perspective: 1100px;
+}
+
+body {
+  background:
+    radial-gradient(circle at 10% 16%, rgba(87, 143, 214, 0.22), transparent 30%),
+    radial-gradient(circle at 82% 82%, rgba(232, 174, 101, 0.18), transparent 28%),
+    linear-gradient(170deg, #060914 0%, #0a1222 55%, #091019 100%);
+  color: rgb(var(--color-light));
+  font-family: 'Jost', sans-serif;
+  font-size: 18px;
+  line-height: 1.55;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+section {
+  position: relative;
+}
+
+main {
+  perspective: var(--depth-perspective, 1400px);
+  perspective-origin: 50% 46%;
+  transform-style: preserve-3d;
+}
+
+.depth-section {
+  transform-style: preserve-3d;
+  will-change: transform, filter, opacity;
+  transition: transform 280ms cubic-bezier(0.2, 0.8, 0.2, 1), filter 280ms ease, opacity 280ms ease;
+}
+
+.depth-control select {
+  border: 1px solid rgb(var(--color-border) / 0.55);
+}
+
+section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(6, 10, 18, 0.2), rgba(6, 10, 18, 0.45));
+  pointer-events: none;
+  z-index: -1;
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: rgb(var(--color-bg)); }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(rgb(var(--color-accent)), rgb(var(--color-cyan)));
+  border-radius: 4px;
+}
+
+::selection { background: var(--selection-bg); color: rgb(var(--color-light)); }
+
+.gradient-text {
+  background: linear-gradient(135deg, rgb(var(--color-light)), rgb(var(--color-cyan)), rgb(var(--color-muted)));
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-x 4s ease infinite;
+}
+
+.glass {
+  background: color-mix(in srgb, var(--glass-bg) 60%, rgba(10, 16, 30, 0.6));
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+}
+
+.glow-border {
+  border: 1px solid rgb(var(--color-border));
+}
+
+.noise::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 999;
+  opacity: 0.14;
+}
+
+@keyframes gradient-x {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.8); opacity: 1; }
+  100% { transform: scale(2); opacity: 0; }
+}
+
+.pulse-ring::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid #6c63ff;
+  animation: pulse-ring 2s ease-out infinite;
+}
+
+.cursor-glow {
+  cursor: none;
+}
+
+/* Reduced Motion Support (Idea 147) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  main {
+    perspective: none;
+  }
+
+  .depth-section {
+    transform: none !important;
+    filter: none !important;
+    opacity: 1 !important;
+    transition: none !important;
+  }
+}
