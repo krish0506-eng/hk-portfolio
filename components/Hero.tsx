@@ -97,11 +97,24 @@ export default function Hero() {
           />
         ))}
 
+        {/* Ambient glow orbs */}
         <motion.div
           className="absolute -top-24 right-[8%] h-64 w-64 rounded-full blur-3xl"
-          style={{ background: "radial-gradient(circle, rgb(var(--color-accent)) 0%, transparent 72%)", opacity: 0.12 }}
+          style={{ background: "radial-gradient(circle, rgb(var(--color-accent)) 0%, transparent 72%)", opacity: 0.14 }}
           animate={{ y: [0, 16, 0], x: [0, -10, 0] }}
           transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute bottom-0 left-[5%] h-48 w-48 rounded-full blur-3xl"
+          style={{ background: "radial-gradient(circle, rgb(var(--color-cyan)) 0%, transparent 70%)", opacity: 0.09 }}
+          animate={{ y: [0, -12, 0], x: [0, 8, 0] }}
+          transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-96 w-96 rounded-full blur-3xl"
+          style={{ background: "radial-gradient(circle, rgb(var(--color-pink)) 0%, transparent 70%)", opacity: 0.05 }}
+          animate={{ scale: [1, 1.15, 1] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
         />
       </div>
 
@@ -191,10 +204,10 @@ export default function Hero() {
             className="mt-6 flex flex-wrap items-center gap-3"
           >
             <motion.button
-              whileHover={{ y: -2 }}
-              whileTap={{ scale: 0.98 }}
+              whileHover={{ scale: 1.04, y: -2 }}
+              whileTap={{ scale: 0.97 }}
               onClick={() => document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" })}
-              className="rounded-full bg-accent px-7 py-3.5 font-body text-sm font-semibold text-bg shadow-lg shadow-accent/30 hover:shadow-accent/50 transition-shadow duration-300"
+              className="glass-btn rounded-full px-7 py-3.5 font-body text-sm font-semibold relative z-10"
             >
               View My Work
             </motion.button>
@@ -292,8 +305,9 @@ export default function Hero() {
               href={href}
               target="_blank"
               rel="noopener noreferrer"
-              whileHover={{ y: -2 }}
-              className="rounded-full border border-border bg-surface/80 p-3 text-muted transition-colors duration-300 hover:text-accent"
+              whileHover={{ y: -3, scale: 1.1 }}
+              whileTap={{ scale: 0.93 }}
+              className="rounded-full border border-border bg-surface/80 p-3 text-muted transition-all duration-300 hover:text-accent hover:border-accent/50 hover:shadow-[0_0_16px_rgba(139,92,246,0.25)]"
               aria-label={label}
             >
               <Icon size={22} />
