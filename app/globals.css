@@ -499,9 +499,10 @@ body::after {
   .glass-btn {
     backdrop-filter: blur(8px);
   }
-  /* Disable particle canvas heavy rendering on mobile */
+  /* Reduce particle canvas intensity on mobile instead of hiding */
   .particle-canvas {
-    display: none;
+    opacity: 0.3;
+    will-change: auto;
   }
 }
 

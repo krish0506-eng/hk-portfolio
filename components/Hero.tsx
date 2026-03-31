@@ -1,5 +1,6 @@
 "use client";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 import { TypeAnimation } from "react-type-animation";
 import { FiGithub, FiLinkedin, FiMail } from "react-icons/fi";
 import { HiArrowDown } from "react-icons/hi";
@@ -59,6 +60,16 @@ const headlineLines = [
 
 export default function Hero() {
   const prefersReducedMotion = useReducedMotion();
+  const sectionRef = useRef<HTMLElement>(null);
+
+  // Scroll-fade: hero content fades + slides up as you scroll away
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
+  const heroY = useTransform(scrollYProgress, [0, 0.6], [0, -40]);
+
   // Manifesto & brand trust signals (Ideas 1, 14, 27)
   const manifesto = "Ship useful products that solve real problems.";
   const trustPhrase = "No fluff, practical delivery only.";
@@ -69,7 +80,7 @@ export default function Hero() {
   ];
 
   return (
-    <section id="hero" className="relative min-h-[90vh] flex items-center overflow-hidden px-6 pt-24 pb-10">
+    <section id="hero" ref={sectionRef} className="relative min-h-[90vh] flex items-center overflow-hidden px-6 pt-24 pb-10">
       <div className="absolute inset-0 pointer-events-none">
         <div
           className="absolute inset-0 opacity-40"
@@ -118,7 +129,10 @@ export default function Hero() {
         />
       </div>
 
-      <div className="relative z-10 mx-auto grid w-full max-w-6xl items-center gap-8 lg:grid-cols-[1.15fr_0.85fr]">
+      <motion.div
+        style={{ opacity: prefersReducedMotion ? 1 : heroOpacity, y: prefersReducedMotion ? 0 : heroY }}
+        className="relative z-10 mx-auto grid w-full max-w-6xl items-center gap-8 lg:grid-cols-[1.15fr_0.85fr]"
+      >
         <div>
           {/* Manifesto & positioning (Ideas 1, 2, 12, 13, 14) */}
           <motion.div
@@ -177,14 +191,27 @@ export default function Hero() {
             Vibe Coding · Vibe Design · Prompt Engineering · Agentic AI Engineering
           </motion.p>
 
+          {/* Clear VALUE STATEMENT */}
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.62 }}
+            className="mt-4 max-w-2xl text-base md:text-lg font-body leading-relaxed"
+            style={{ color: "rgb(var(--color-light))" }}
+          >
+            I design and build{" "}
+            <span className="gradient-text font-semibold">AI-powered, high-performance UI products</span>{" "}
+            that feel premium — from concept to deployed experience.
+          </motion.p>
+
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.72 }}
-            className="mt-3 max-w-2xl text-lg leading-relaxed text-muted md:text-xl"
+            className="mt-3 max-w-2xl text-base leading-relaxed text-muted"
           >
-            I build AI-powered products through vibe coding, prompt engineering, and agentic
-            workflows that turn ideas into production-ready digital experiences.
+            Through vibe coding, prompt engineering, and agentic workflows I turn ideas into
+            production-ready digital experiences at speed.
           </motion.p>
 
           {/* Anti-positioning statement (Idea 13) */}
@@ -314,7 +341,7 @@ export default function Hero() {
             </motion.a>
           ))}
         </motion.div>
-      </div>
+      </motion.div>
 
       <motion.div
         initial={{ opacity: 0 }}

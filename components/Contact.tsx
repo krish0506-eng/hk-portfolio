@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import { FiMail, FiGithub, FiLinkedin, FiSend } from "react-icons/fi";
+import { FiMail, FiGithub, FiLinkedin, FiSend, FiMessageCircle } from "react-icons/fi";
 import { toast } from "sonner";
 
 export default function Contact() {
@@ -38,6 +38,9 @@ export default function Contact() {
           <h2 className="font-display font-bold text-3xl md:text-4xl text-light mt-3">
             Get In <span className="gradient-text">Touch</span>
           </h2>
+          <p className="mt-3 text-muted font-body max-w-lg mx-auto text-base">
+            I reply within 4 hours. Let's build something remarkable.
+          </p>
         </motion.div>
 
         <div className="grid md:grid-cols-2 gap-12 items-start">
@@ -62,6 +65,7 @@ export default function Contact() {
                 { icon: FiMail, label: "krishnaahari05@gmail.com", href: "mailto:krishnaahari05@gmail.com", color: "#ff2d78" },
                 { icon: FiLinkedin, label: "linkedin.com/in/hari-krishnaa-n-", href: "https://linkedin.com/in/hari-krishnaa-n-", color: "#0077b5" },
                 { icon: FiGithub, label: "github.com/krishnaa-0506", href: "https://github.com/krishnaa-0506", color: "#6c63ff" },
+                { icon: FiMessageCircle, label: "WhatsApp — Quick Chat", href: "https://wa.me/919000000000?text=Hi%20Hari%2C%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20connect!", color: "#25d366" },
               ].map(({ icon: Icon, label, href, color }) => (
                 <motion.a
                   key={label}
