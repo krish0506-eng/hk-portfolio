@@ -49,9 +49,11 @@ export default function Contact() {
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ delay: 0.2 }}
           >
-            <p className="text-muted text-lg font-body leading-relaxed mb-8">
-              I'm open to freelance projects and collaborations. Have an
-              idea? Let's build something remarkable together.
+            <p className="text-accent font-body font-bold text-lg mb-3">
+              Have an idea? Let&apos;s turn it into a real product.
+            </p>
+            <p className="text-muted text-base font-body leading-relaxed mb-8">
+              I'm open to freelance projects and collaborations — from AI automations to full product builds.
             </p>
 
             {/* SLA & Reply Time (Idea 113) */}
@@ -65,7 +67,7 @@ export default function Contact() {
                 { icon: FiMail, label: "krishnaahari05@gmail.com", href: "mailto:krishnaahari05@gmail.com", color: "#ff2d78" },
                 { icon: FiLinkedin, label: "linkedin.com/in/hari-krishnaa-n-", href: "https://linkedin.com/in/hari-krishnaa-n-", color: "#0077b5" },
                 { icon: FiGithub, label: "github.com/krishnaa-0506", href: "https://github.com/krishnaa-0506", color: "#6c63ff" },
-                { icon: FiMessageCircle, label: "WhatsApp — Quick Chat", href: "https://wa.me/919000000000?text=Hi%20Hari%2C%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20connect!", color: "#25d366" },
+                { icon: FiMessageCircle, label: "WhatsApp — Quick Chat", href: "https://wa.me/91XXXXXXXXXX?text=Hi%20Hari%2C%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20connect!", color: "#25d366" }, // TODO: replace XXXXXXXXXX with real number
               ].map(({ icon: Icon, label, href, color }) => (
                 <motion.a
                   key={label}

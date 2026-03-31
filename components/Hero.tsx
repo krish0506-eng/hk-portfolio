@@ -139,10 +139,16 @@ export default function Hero() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="inline-flex items-center gap-2 rounded-full border border-border bg-surface/70 px-4 py-2 text-xs font-mono text-muted"
+            className="flex flex-wrap gap-2"
           >
-            <span className="h-2 w-2 rounded-full bg-accent animate-pulse" />
-            Available for freelance work
+            <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface/70 px-4 py-2 text-xs font-mono text-muted">
+              <span className="h-2 w-2 rounded-full bg-accent animate-pulse" />
+              Available for freelance work
+            </div>
+            <div className="inline-flex items-center gap-2 rounded-full border border-cyan/30 bg-cyan/5 px-4 py-2 text-xs font-mono text-cyan">
+              <span className="h-2 w-2 rounded-full bg-cyan animate-pulse" />
+              Currently building AI-powered systems at HYNEX Technologies
+            </div>
           </motion.div>
 
           <motion.p

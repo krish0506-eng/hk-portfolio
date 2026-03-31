@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiSend, FiX, FiMessageSquare, FiZap } from "react-icons/fi";
 
@@ -21,12 +21,24 @@ export default function AIChatAgent() {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      text: "Hey! I'm HK AI — Hari Krishnaa's portfolio assistant. Ask me about his projects, tech stack, or how to hire him. ⚡",
+      text: "I'm HK AI — I can explain projects, tech stack, and help you plan your app. What would you like to know? ⚡",
     },
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
+
+  // Keyboard easter egg: Shift + A toggles the chat (skips when user is typing in an input)
+  const toggle = useCallback(() => setOpen((v) => !v), []);
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      const tag = (document.activeElement?.tagName ?? "").toLowerCase();
+      if (tag === "input" || tag === "textarea" || tag === "select") return;
+      if (e.shiftKey && e.key === "A") toggle();
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [toggle]);
 
   useEffect(() => {
     if (open) bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -62,44 +74,69 @@ export default function AIChatAgent() {
 
   return (
     <>
-      {/* Floating button */}
-      <motion.button
-        onClick={() => setOpen((v) => !v)}
-        whileHover={{ scale: 1.08 }}
-        whileTap={{ scale: 0.94 }}
-        className="fixed bottom-6 right-6 z-[9990] w-14 h-14 rounded-full flex items-center justify-center shadow-2xl"
-        style={{
-          background: "linear-gradient(135deg, rgba(139,92,246,0.85) 0%, rgba(6,182,212,0.75) 100%)",
-          backdropFilter: "blur(16px)",
-          border: "1px solid rgba(139,92,246,0.55)",
-          boxShadow: "0 0 30px rgba(139,92,246,0.35), 0 8px 32px rgba(0,0,0,0.4)",
-        }}
-        aria-label="Open AI Chat"
-      >
-        <AnimatePresence mode="wait">
-          {open ? (
-            <motion.span
-              key="close"
-              initial={{ rotate: -90, opacity: 0 }}
-              animate={{ rotate: 0, opacity: 1 }}
-              exit={{ rotate: 90, opacity: 0 }}
-              transition={{ duration: 0.2 }}
+      {/* "Ask my AI assistant" label + floating button group */}
+      <div className="fixed bottom-6 right-6 z-[9990] flex flex-col items-end gap-2">
+        {/* Label — visible only when chat is closed */}
+        <AnimatePresence>
+          {!open && (
+            <motion.div
+              initial={{ opacity: 0, x: 12, scale: 0.9 }}
+              animate={{ opacity: 1, x: 0, scale: 1 }}
+              exit={{ opacity: 0, x: 12, scale: 0.9 }}
+              transition={{ duration: 0.22 }}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full font-mono text-xs font-medium select-none pointer-events-none"
+              style={{
+                background: "rgba(139,92,246,0.14)",
+                border: "1px solid rgba(139,92,246,0.30)",
+                color: "#a78bfa",
+                backdropFilter: "blur(10px)",
+              }}
             >
-              <FiX size={22} className="text-white" />
-            </motion.span>
-          ) : (
-            <motion.span
-              key="open"
-              initial={{ rotate: 90, opacity: 0 }}
-              animate={{ rotate: 0, opacity: 1 }}
-              exit={{ rotate: -90, opacity: 0 }}
-              transition={{ duration: 0.2 }}
-            >
-              <FiMessageSquare size={22} className="text-white" />
-            </motion.span>
+              <FiZap size={11} />
+              Ask my AI assistant
+            </motion.div>
           )}
         </AnimatePresence>
-      </motion.button>
+
+        {/* Floating button */}
+        <motion.button
+          onClick={toggle}
+          whileHover={{ scale: 1.08 }}
+          whileTap={{ scale: 0.94 }}
+          className="w-14 h-14 rounded-full flex items-center justify-center shadow-2xl"
+          style={{
+            background: "linear-gradient(135deg, rgba(139,92,246,0.85) 0%, rgba(6,182,212,0.75) 100%)",
+            backdropFilter: "blur(16px)",
+            border: "1px solid rgba(139,92,246,0.55)",
+            boxShadow: "0 0 30px rgba(139,92,246,0.35), 0 8px 32px rgba(0,0,0,0.4)",
+          }}
+          aria-label="Open AI Chat (or press Shift+A)"
+        >
+          <AnimatePresence mode="wait">
+            {open ? (
+              <motion.span
+                key="close"
+                initial={{ rotate: -90, opacity: 0 }}
+                animate={{ rotate: 0, opacity: 1 }}
+                exit={{ rotate: 90, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                <FiX size={22} className="text-white" />
+              </motion.span>
+            ) : (
+              <motion.span
+                key="open"
+                initial={{ rotate: 90, opacity: 0 }}
+                animate={{ rotate: 0, opacity: 1 }}
+                exit={{ rotate: -90, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                <FiMessageSquare size={22} className="text-white" />
+              </motion.span>
+            )}
+          </AnimatePresence>
+        </motion.button>
+      </div>
 
       {/* Notification dot when closed */}
       <AnimatePresence>
@@ -108,7 +145,7 @@ export default function AIChatAgent() {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             exit={{ scale: 0 }}
-            className="fixed bottom-[74px] right-6 z-[9991] w-3 h-3 rounded-full bg-cyan"
+            className="fixed bottom-[88px] right-6 z-[9991] w-3 h-3 rounded-full bg-cyan"
             style={{ boxShadow: "0 0 8px rgba(6,182,212,0.8)" }}
           />
         )}

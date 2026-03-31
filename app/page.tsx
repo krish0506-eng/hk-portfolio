@@ -17,10 +17,12 @@ import ThreeBackdrop from "@/components/ThreeBackdrop";
 import ScrollDepthEngine from "@/components/ScrollDepthEngine";
 import AIChatAgent from "@/components/AIChatAgent";
 import CustomCursor from "@/components/CustomCursor";
+import SiteLoader from "@/components/SiteLoader";
 
 export default function Home() {
   return (
     <main className="relative isolate overflow-x-hidden">
+      <SiteLoader />
       <CustomCursor />
       <ThreeBackdrop />
       <ScrollDepthEngine />
