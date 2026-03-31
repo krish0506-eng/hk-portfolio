@@ -1,13 +1,15 @@
 "use client";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { HiMenuAlt3, HiX } from "react-icons/hi";
+import { HiMenuAlt3, HiX, HiSun, HiMoon } from "react-icons/hi";
+import { useTheme } from "@/components/ThemeProvider";
 
 const links = ["About", "Skills", "Projects", "Experience", "Certifications", "Contact"];
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const { theme, toggle } = useTheme();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
@@ -53,19 +55,86 @@ export default function Navbar() {
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-accent to-cyan group-hover:w-full transition-all duration-300" />
             </motion.button>
           ))}
+
+          {/* ── Neumorphic theme toggle ─────────────────────────────── */}
+          <motion.button
+            whileTap={{ scale: 0.90 }}
+            onClick={toggle}
+            className="neu-btn theme-toggle w-10 h-10 flex items-center justify-center text-muted hover:text-accent"
+            aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+          >
+            <AnimatePresence mode="wait" initial={false}>
+              {theme === "dark" ? (
+                <motion.span
+                  key="sun"
+                  initial={{ rotate: -90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: 90, opacity: 0 }}
+                  transition={{ duration: 0.25 }}
+                >
+                  <HiSun size={18} />
+                </motion.span>
+              ) : (
+                <motion.span
+                  key="moon"
+                  initial={{ rotate: 90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: -90, opacity: 0 }}
+                  transition={{ duration: 0.25 }}
+                >
+                  <HiMoon size={18} />
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </motion.button>
+
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => scrollTo("Contact")}
-            className="px-6 py-2.5 rounded-full text-base font-body font-medium glow-border text-accent hover:bg-accent hover:text-white transition-all duration-300"
+            className="neu-btn px-6 py-2.5 rounded-full text-base font-body font-medium text-accent hover:text-white hover:bg-accent transition-all duration-300"
           >
             Hire Me
           </motion.button>
         </div>
 
-        <button className="md:hidden text-light" onClick={() => setOpen(!open)}>
-          {open ? <HiX size={24} /> : <HiMenuAlt3 size={24} />}
-        </button>
+        <div className="flex md:hidden items-center gap-3">
+          {/* Mobile theme toggle */}
+          <motion.button
+            whileTap={{ scale: 0.90 }}
+            onClick={toggle}
+            className="neu-btn theme-toggle w-9 h-9 flex items-center justify-center text-muted"
+            aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+          >
+            <AnimatePresence mode="wait" initial={false}>
+              {theme === "dark" ? (
+                <motion.span
+                  key="sun-m"
+                  initial={{ rotate: -90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: 90, opacity: 0 }}
+                  transition={{ duration: 0.25 }}
+                >
+                  <HiSun size={16} />
+                </motion.span>
+              ) : (
+                <motion.span
+                  key="moon-m"
+                  initial={{ rotate: 90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: -90, opacity: 0 }}
+                  transition={{ duration: 0.25 }}
+                >
+                  <HiMoon size={16} />
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </motion.button>
+
+          <button className="text-light" onClick={() => setOpen(!open)}>
+            {open ? <HiX size={24} /> : <HiMenuAlt3 size={24} />}
+          </button>
+        </div>
       </div>
 
       <AnimatePresence>

@@ -147,9 +147,9 @@ export default function ThreeBackdrop() {
 
   return (
     <div className="pointer-events-none fixed inset-0 -z-10">
-      <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
-      {/* Neon gradient overlay */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_15%,rgba(139,92,246,0.18),transparent_40%),radial-gradient(circle_at_80%_75%,rgba(6,182,212,0.14),transparent_38%),radial-gradient(circle_at_55%_5%,rgba(217,70,239,0.10),transparent_30%),linear-gradient(180deg,rgba(3,7,18,0.30),rgba(3,7,18,0.72))]" />
+      <canvas ref={canvasRef} className="particle-canvas absolute inset-0 w-full h-full" />
+      {/* Gradient overlay — adapts to theme via CSS */}
+      <div className="backdrop-overlay absolute inset-0" />
     </div>
   );
 }

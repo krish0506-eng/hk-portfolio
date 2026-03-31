@@ -1,5 +1,6 @@
 "use client";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 import { TypeAnimation } from "react-type-animation";
 import { FiGithub, FiLinkedin, FiMail } from "react-icons/fi";
 import { HiArrowDown } from "react-icons/hi";
@@ -59,6 +60,16 @@ const headlineLines = [
 
 export default function Hero() {
   const prefersReducedMotion = useReducedMotion();
+  const sectionRef = useRef<HTMLElement>(null);
+
+  // Scroll-fade: hero content fades + slides up as you scroll away
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
+  const heroY = useTransform(scrollYProgress, [0, 0.6], [0, -40]);
+
   // Manifesto & brand trust signals (Ideas 1, 14, 27)
   const manifesto = "Ship useful products that solve real problems.";
   const trustPhrase = "No fluff, practical delivery only.";
@@ -69,7 +80,7 @@ export default function Hero() {
   ];
 
   return (
-    <section id="hero" className="relative min-h-[90vh] flex items-center overflow-hidden px-6 pt-24 pb-10">
+    <section id="hero" ref={sectionRef} className="relative min-h-[90vh] flex items-center overflow-hidden px-6 pt-24 pb-10">
       <div className="absolute inset-0 pointer-events-none">
         <div
           className="absolute inset-0 opacity-40"
@@ -97,25 +108,47 @@ export default function Hero() {
           />
         ))}
 
+        {/* Ambient glow orbs */}
         <motion.div
           className="absolute -top-24 right-[8%] h-64 w-64 rounded-full blur-3xl"
-          style={{ background: "radial-gradient(circle, rgb(var(--color-accent)) 0%, transparent 72%)", opacity: 0.12 }}
+          style={{ background: "radial-gradient(circle, rgb(var(--color-accent)) 0%, transparent 72%)", opacity: 0.14 }}
           animate={{ y: [0, 16, 0], x: [0, -10, 0] }}
           transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
         />
+        <motion.div
+          className="absolute bottom-0 left-[5%] h-48 w-48 rounded-full blur-3xl"
+          style={{ background: "radial-gradient(circle, rgb(var(--color-cyan)) 0%, transparent 70%)", opacity: 0.09 }}
+          animate={{ y: [0, -12, 0], x: [0, 8, 0] }}
+          transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-96 w-96 rounded-full blur-3xl"
+          style={{ background: "radial-gradient(circle, rgb(var(--color-pink)) 0%, transparent 70%)", opacity: 0.05 }}
+          animate={{ scale: [1, 1.15, 1] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        />
       </div>
 
-      <div className="relative z-10 mx-auto grid w-full max-w-6xl items-center gap-8 lg:grid-cols-[1.15fr_0.85fr]">
+      <motion.div
+        style={{ opacity: prefersReducedMotion ? 1 : heroOpacity, y: prefersReducedMotion ? 0 : heroY }}
+        className="relative z-10 mx-auto grid w-full max-w-6xl items-center gap-8 lg:grid-cols-[1.15fr_0.85fr]"
+      >
         <div>
           {/* Manifesto & positioning (Ideas 1, 2, 12, 13, 14) */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="inline-flex items-center gap-2 rounded-full border border-border bg-surface/70 px-4 py-2 text-xs font-mono text-muted"
+            className="flex flex-wrap gap-2"
           >
-            <span className="h-2 w-2 rounded-full bg-accent animate-pulse" />
-            Available for freelance work
+            <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface/70 px-4 py-2 text-xs font-mono text-muted">
+              <span className="h-2 w-2 rounded-full bg-accent animate-pulse" />
+              Available for freelance work
+            </div>
+            <div className="inline-flex items-center gap-2 rounded-full border border-cyan/30 bg-cyan/5 px-4 py-2 text-xs font-mono text-cyan">
+              <span className="h-2 w-2 rounded-full bg-cyan animate-pulse" />
+              Currently building AI-powered systems at HYNEX Technologies
+            </div>
           </motion.div>
 
           <motion.p
@@ -164,14 +197,27 @@ export default function Hero() {
             Vibe Coding · Vibe Design · Prompt Engineering · Agentic AI Engineering
           </motion.p>
 
+          {/* Clear VALUE STATEMENT */}
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.62 }}
+            className="mt-4 max-w-2xl text-base md:text-lg font-body leading-relaxed"
+            style={{ color: "rgb(var(--color-light))" }}
+          >
+            I design and build{" "}
+            <span className="gradient-text font-semibold">AI-powered, high-performance UI products</span>{" "}
+            that feel premium — from concept to deployed experience.
+          </motion.p>
+
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.72 }}
-            className="mt-3 max-w-2xl text-lg leading-relaxed text-muted md:text-xl"
+            className="mt-3 max-w-2xl text-base leading-relaxed text-muted"
           >
-            I build AI-powered products through vibe coding, prompt engineering, and agentic
-            workflows that turn ideas into production-ready digital experiences.
+            Through vibe coding, prompt engineering, and agentic workflows I turn ideas into
+            production-ready digital experiences at speed.
           </motion.p>
 
           {/* Anti-positioning statement (Idea 13) */}
@@ -191,10 +237,10 @@ export default function Hero() {
             className="mt-6 flex flex-wrap items-center gap-3"
           >
             <motion.button
-              whileHover={{ y: -2 }}
-              whileTap={{ scale: 0.98 }}
+              whileHover={{ scale: 1.04, y: -2 }}
+              whileTap={{ scale: 0.97 }}
               onClick={() => document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" })}
-              className="rounded-full bg-accent px-7 py-3.5 font-body text-sm font-semibold text-bg"
+              className="glass-btn rounded-full px-7 py-3.5 font-body text-sm font-semibold relative z-10"
             >
               View My Work
             </motion.button>
@@ -202,7 +248,7 @@ export default function Hero() {
               whileHover={{ y: -2 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
-              className="rounded-full border border-border bg-surface/80 px-7 py-3.5 font-body text-sm font-semibold text-light"
+              className="neu-btn rounded-full px-7 py-3.5 font-body text-sm font-semibold text-light"
             >
               Get In Touch
             </motion.button>
@@ -292,15 +338,16 @@ export default function Hero() {
               href={href}
               target="_blank"
               rel="noopener noreferrer"
-              whileHover={{ y: -2 }}
-              className="rounded-full border border-border bg-surface/80 p-3 text-muted transition-colors duration-300 hover:text-accent"
+              whileHover={{ y: -3, scale: 1.1 }}
+              whileTap={{ scale: 0.93 }}
+              className="rounded-full border border-border bg-surface/80 p-3 text-muted transition-all duration-300 hover:text-accent hover:border-accent/50 hover:shadow-[0_0_16px_rgba(139,92,246,0.25)]"
               aria-label={label}
             >
               <Icon size={22} />
             </motion.a>
           ))}
         </motion.div>
-      </div>
+      </motion.div>
 
       <motion.div
         initial={{ opacity: 0 }}

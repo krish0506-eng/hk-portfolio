@@ -20,6 +20,8 @@ type Project = {
   color: string;
   glow: string;
   featured: boolean;
+  github?: string;
+  demo?: string;
 };
 
 const projects: Project[] = [
@@ -36,6 +38,8 @@ const projects: Project[] = [
     color: "#8b5cf6",
     glow: "rgba(139, 92, 246, 0.35)",
     featured: true,
+    github: "https://github.com/krishnaa-0506",
+    demo: undefined,
   },
   {
     title: "AI Agentic Email System",
@@ -50,6 +54,8 @@ const projects: Project[] = [
     color: "#06b6d4",
     glow: "rgba(6, 182, 212, 0.35)",
     featured: true,
+    github: "https://github.com/krishnaa-0506",
+    demo: undefined,
   },
   {
     title: "Hira",
@@ -64,6 +70,8 @@ const projects: Project[] = [
     color: "#d946ef",
     glow: "rgba(217, 70, 239, 0.35)",
     featured: true,
+    github: "https://github.com/krishnaa-0506",
+    demo: undefined,
   },
   {
     title: "As Always",
@@ -361,13 +369,10 @@ export default function Projects() {
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ delay: i * 0.09, duration: 0.55 }}
                 whileHover={{
-                  y: -14,
-                  rotateX: 4,
-                  rotateY: -4,
                   boxShadow: `0 36px 72px ${proj.glow}, 0 0 60px ${proj.glow.replace("0.35","0.12")}`,
                 }}
-                style={{ transformStyle: "preserve-3d", perspective: 1000 }}
-                className="glass rounded-3xl border border-border/50 p-7 group relative overflow-hidden flex flex-col cursor-pointer"
+                style={{ perspective: 1000 }}
+                className="project-card glass rounded-3xl border border-border/50 p-7 group relative overflow-hidden flex flex-col cursor-pointer"
                 onClick={() => setSelected(proj)}
               >
                 {/* Top glow */}
@@ -425,16 +430,54 @@ export default function Projects() {
                   ))}
                 </div>
 
-                {/* View details CTA */}
-                <motion.div
-                  className="flex items-center gap-2 text-sm font-mono font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                  style={{ color: proj.color }}
-                >
-                  <span>View Case Study</span>
-                  <motion.span animate={{ x: [0, 4, 0] }} transition={{ duration: 1.2, repeat: Infinity }}>
-                    →
-                  </motion.span>
-                </motion.div>
+                {/* View details CTA + GitHub/Demo links */}
+                <div className="flex items-center justify-between mt-auto">
+                  <motion.div
+                    className="flex items-center gap-2 text-sm font-mono font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    style={{ color: proj.color }}
+                  >
+                    <span>View Case Study</span>
+                    <motion.span animate={{ x: [0, 4, 0] }} transition={{ duration: 1.2, repeat: Infinity }}>
+                      →
+                    </motion.span>
+                  </motion.div>
+
+                  {/* GitHub / Demo link buttons — revealed on hover */}
+                  <div className="card-links flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+                    {proj.github && (
+                      <a
+                        href={proj.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-8 h-8 rounded-full flex items-center justify-center border transition-all duration-200 hover:scale-110"
+                        style={{
+                          borderColor: `${proj.color}40`,
+                          background: `${proj.color}10`,
+                          color: proj.color,
+                        }}
+                        title="GitHub"
+                      >
+                        <FiGithub size={14} />
+                      </a>
+                    )}
+                    {proj.demo && (
+                      <a
+                        href={proj.demo}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-8 h-8 rounded-full flex items-center justify-center border transition-all duration-200 hover:scale-110"
+                        style={{
+                          borderColor: `${proj.color}40`,
+                          background: `${proj.color}10`,
+                          color: proj.color,
+                        }}
+                        title="Live Demo"
+                      >
+                        <FiExternalLink size={14} />
+                      </a>
+                    )}
+                  </div>
+                </div>
               </motion.div>
             ))}
           </AnimatePresence>
@@ -447,10 +490,10 @@ export default function Projects() {
           className="flex justify-center mt-12"
         >
           <motion.button
-            whileHover={{ scale: 1.05, boxShadow: "0 0 30px rgba(139, 92, 246, 0.25)" }}
-            whileTap={{ scale: 0.95 }}
+            whileHover={{ scale: 1.04, y: -2 }}
+            whileTap={{ scale: 0.96 }}
             onClick={() => setShowAll(!showAll)}
-            className="flex items-center gap-2 px-8 py-3.5 rounded-full glow-border text-accent font-body text-base hover:bg-accent/10 transition-all"
+            className="glass-btn flex items-center gap-2 px-8 py-3.5 rounded-full font-body text-sm font-medium"
           >
             {showAll ? "Show Less" : "View All Projects"}
             <motion.span animate={{ rotate: showAll ? 180 : 0 }} transition={{ duration: 0.3 }}>
