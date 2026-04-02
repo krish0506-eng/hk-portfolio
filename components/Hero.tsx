@@ -2,9 +2,7 @@
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { TypeAnimation } from "react-type-animation";
-import { FiGithub, FiLinkedin, FiMail } from "react-icons/fi";
-import { HiArrowDown } from "react-icons/hi";
-
+import { ArrowDown, Download, ArrowRight } from "lucide-react";
 const headlineLines = [
   "Designing AI-native products with intention.",
   "Building agentic systems with real impact.",
@@ -70,45 +68,13 @@ export default function Hero() {
   const heroOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
   const heroY = useTransform(scrollYProgress, [0, 0.6], [0, -40]);
 
-  // Manifesto & brand trust signals (Ideas 1, 14, 27)
-  const manifesto = "Ship useful products that solve real problems.";
+  // Manifesto & brand trust signals
   const trustPhrase = "No fluff, practical delivery only.";
-  const proofMetrics = [
-    { label: "Projects Shipped", value: "5+" },
-    { label: "Automations Built", value: "20+" },
-    { label: "Avg Reply Time", value: "4h" },
-  ];
 
   return (
     <section id="hero" ref={sectionRef} className="relative min-h-[90vh] flex items-center overflow-hidden px-6 pt-24 pb-10">
       <div className="absolute inset-0 pointer-events-none">
-        <div
-          className="absolute inset-0 opacity-40"
-          style={{
-            backgroundImage:
-              "linear-gradient(to right, rgb(var(--color-border)) 1px, transparent 1px), linear-gradient(to bottom, rgb(var(--color-border)) 1px, transparent 1px)",
-            backgroundSize: "48px 48px",
-            maskImage: "radial-gradient(circle at center, black 22%, transparent 78%)",
-          }}
-        />
-
-        {[0, 1, 2].map((line) => (
-          <motion.div
-            key={line}
-            className="absolute h-px w-[120%]"
-            style={{
-              top: `${42 + line * 8}%`,
-              left: "-10%",
-              background:
-                "linear-gradient(90deg, transparent 0%, rgb(var(--color-muted)) 40%, rgb(var(--color-accent)) 50%, rgb(var(--color-muted)) 60%, transparent 100%)",
-              opacity: 0.36 - line * 0.08,
-            }}
-            animate={{ x: ["-8%", "8%", "-8%"] }}
-            transition={{ duration: 10 + line * 2, repeat: Infinity, ease: "easeInOut" }}
-          />
-        ))}
-
-        {/* Ambient glow orbs */}
+        {/* Ambient glow orbs only — no grid */}
         <motion.div
           className="absolute -top-24 right-[8%] h-64 w-64 rounded-full blur-3xl"
           style={{ background: "radial-gradient(circle, rgb(var(--color-accent)) 0%, transparent 72%)", opacity: 0.14 }}
@@ -145,10 +111,6 @@ export default function Hero() {
               <span className="h-2 w-2 rounded-full bg-accent animate-pulse" />
               Available for freelance work
             </div>
-            <div className="inline-flex items-center gap-2 rounded-full border border-cyan/30 bg-cyan/5 px-4 py-2 text-xs font-mono text-cyan">
-              <span className="h-2 w-2 rounded-full bg-cyan animate-pulse" />
-              Currently building AI-powered systems at HYNEX Technologies
-            </div>
           </motion.div>
 
           <motion.p
@@ -157,7 +119,6 @@ export default function Hero() {
             transition={{ duration: 0.75, delay: 0.1 }}
             className="mt-4 inline-block font-mono text-xs uppercase tracking-widest text-accent"
           >
-            💡 {manifesto}
           </motion.p>
 
           <motion.h1
@@ -240,9 +201,9 @@ export default function Hero() {
               whileHover={{ scale: 1.04, y: -2 }}
               whileTap={{ scale: 0.97 }}
               onClick={() => document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" })}
-              className="glass-btn rounded-full px-7 py-3.5 font-body text-sm font-semibold relative z-10"
+              className="glass-btn rounded-full px-7 py-3.5 font-body text-sm font-semibold relative z-10 inline-flex items-center gap-2"
             >
-              View My Work
+              View My Work <ArrowRight size={14} />
             </motion.button>
             <motion.button
               whileHover={{ y: -2 }}
@@ -252,6 +213,16 @@ export default function Hero() {
             >
               Get In Touch
             </motion.button>
+            <motion.a
+              whileHover={{ scale: 1.04, y: -2 }}
+              whileTap={{ scale: 0.97 }}
+              href="/api/resume"
+              download="Hari_Krishnaa_Resume.pdf"
+              className="neu-btn rounded-full px-7 py-3.5 font-body text-sm font-semibold inline-flex items-center gap-2 text-light"
+            >
+              <Download size={14} />
+              Download CV
+            </motion.a>
           </motion.div>
         </div>
 
@@ -261,63 +232,55 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 0.5 }}
           className="glass rounded-3xl border border-border p-5"
         >
-          {/* Animated 3D-style avatar replacing the blank placeholder */}
-          <div className="mx-auto mb-4 relative flex h-36 w-36 items-center justify-center">
-            {/* Pulsing outer ring */}
+          {/* Name + favicon badge */}
+          <div className="flex items-center gap-2 mb-4">
+            <img src="/favicon.svg" alt="HK" className="w-7 h-7 rounded-lg" />
+            <span className="font-display font-bold text-base text-light">Hari Krishnaa N</span>
+          </div>
+          {/* Profile photo with orbital rings */}
+          <div className="mx-auto mb-5 relative flex h-48 w-48 items-center justify-center">
             <motion.div
               className="absolute inset-0 rounded-full border border-accent/30"
-              animate={prefersReducedMotion ? {} : { scale: [1, 1.12, 1], opacity: [0.5, 0.15, 0.5] }}
+              animate={prefersReducedMotion ? {} : { scale: [1, 1.1, 1], opacity: [0.5, 0.15, 0.5] }}
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
             />
-            {/* Orbiting ring 1 */}
             <div
-              className="absolute inset-1 rounded-full border border-cyan/25"
+              className="absolute inset-2 rounded-full border border-cyan/25"
               style={prefersReducedMotion ? undefined : { animation: "orbit-ring 8s linear infinite" }}
             >
-              <div className="absolute -top-1 left-1/2 -translate-x-1/2 h-2 w-2 rounded-full bg-cyan/70" />
+              <div className="absolute -top-1 left-1/2 -translate-x-1/2 h-2.5 w-2.5 rounded-full bg-cyan/70" />
             </div>
-            {/* Orbiting ring 2 — reverse */}
             <div
-              className="absolute inset-4 rounded-full border border-pink/20"
+              className="absolute inset-6 rounded-full border border-pink/20"
               style={prefersReducedMotion ? undefined : { animation: "orbit-ring-rev 12s linear infinite" }}
             >
-              <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 h-1.5 w-1.5 rounded-full bg-pink/60" />
+              <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 h-2 w-2 rounded-full bg-pink/60" />
             </div>
-            {/* Core avatar disc */}
-            <div className="relative z-10 flex h-24 w-24 items-center justify-center rounded-full border-2 border-accent/50 bg-gradient-to-br from-accent/20 via-card to-cyan/10">
-              <span className="font-display font-bold text-4xl gradient-text glitch-anim">HK</span>
+            {/* Profile photo */}
+            <div className="relative z-10 h-36 w-36 rounded-full border-2 border-accent/50 overflow-hidden">
+              <img
+                src="/profile.jpg"
+                alt="Hari Krishnaa N"
+                className="w-full h-full object-cover object-top"
+              />
             </div>
           </div>
 
-          {/* Hero Proof Row (Idea 27) */}
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7 }}
-            className="mb-6 grid grid-cols-3 gap-2"
-          >
-            {proofMetrics.map((metric) => (
-              <div key={metric.label} className="rounded-lg bg-surface/60 border border-border/50 p-2 text-center">
-                <div className="font-bold text-accent text-base">{metric.value}</div>
-                <div className="text-xs text-muted font-mono mt-1">{metric.label}</div>
-              </div>
-            ))}
-          </motion.div>
+          {/* Hero Proof Row — removed */}
 
           <p className="font-mono text-xs uppercase tracking-[0.24em] text-muted">Current Focus</p>
           <div className="mt-4 space-y-3">
-            <div className="rounded-xl border border-border bg-surface/70 p-4">
-              <p className="text-sm text-muted">Stack</p>
-              <p className="mt-1 text-base font-medium text-light">Next.js, TypeScript, AI APIs</p>
-            </div>
             <div className="rounded-xl border border-border bg-surface/70 p-4">
               <p className="text-sm text-muted">Direction</p>
               <p className="mt-1 text-base font-medium text-light">Workflow intelligence and automation UX</p>
             </div>
             <div className="rounded-xl border border-border bg-surface/70 p-4">
+              <p className="text-sm text-muted">Core Domain</p>
+              <p className="mt-1 text-base font-medium text-light">Mechanical Engineering · Mechatronics · Additive Manufacturing</p>
+            </div>
+            <div className="rounded-xl border border-border bg-surface/70 p-4">
               <p className="text-sm text-muted">Availability</p>
               <p className="mt-1 text-base font-medium text-light">Open to support idea-to-MVP builds, internships, placement roles, full-time work, and freelance projects.</p>
-              <p className="mt-2 text-xs text-accent font-mono">⏱ Typical reply: 4 hours</p>
             </div>
           </div>
         </motion.aside>
@@ -328,24 +291,6 @@ export default function Hero() {
           transition={{ delay: 1.1 }}
           className="lg:col-span-2 flex items-center gap-5"
         >
-          {[
-            { icon: FiGithub, href: "https://github.com/krishnaa-0506", label: "GitHub" },
-            { icon: FiLinkedin, href: "https://linkedin.com/in/hari-krishnaa-n-", label: "LinkedIn" },
-            { icon: FiMail, href: "mailto:krishnaahari05@gmail.com", label: "Email" },
-          ].map(({ icon: Icon, href, label }) => (
-            <motion.a
-              key={label}
-              href={href}
-              target="_blank"
-              rel="noopener noreferrer"
-              whileHover={{ y: -3, scale: 1.1 }}
-              whileTap={{ scale: 0.93 }}
-              className="rounded-full border border-border bg-surface/80 p-3 text-muted transition-all duration-300 hover:text-accent hover:border-accent/50 hover:shadow-[0_0_16px_rgba(139,92,246,0.25)]"
-              aria-label={label}
-            >
-              <Icon size={22} />
-            </motion.a>
-          ))}
         </motion.div>
       </motion.div>
 
@@ -357,7 +302,7 @@ export default function Hero() {
       >
         <span className="text-xs font-mono">scroll</span>
         <motion.div animate={{ y: [0, 8, 0] }} transition={{ duration: 1.5, repeat: Infinity }}>
-          <HiArrowDown size={18} />
+          <ArrowDown size={18} />
         </motion.div>
       </motion.div>
     </section>

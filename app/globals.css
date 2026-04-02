@@ -14,7 +14,7 @@
   --color-cyan:      6 182 212;
   --color-pink:    217  70 239;
   --color-gold:    245 158  11;
-  --color-muted:   148 163 184;
+  --color-muted:   163 176 194;
   --color-light:   248 250 252;
   --glass-bg:      rgba(15, 23, 42, 0.72);
   --glass-border:  rgba(139, 92, 246, 0.18);
@@ -40,7 +40,45 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
-html { scroll-behavior: smooth; }
+.skip-link {
+  position: fixed;
+  left: 12px;
+  top: -48px;
+  z-index: 100000;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: rgb(15, 23, 42);
+  color: rgb(248, 250, 252);
+  border: 1px solid rgba(6, 182, 212, 0.65);
+  text-decoration: none;
+  font-family: "Space Mono", monospace;
+  font-size: 12px;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus-visible {
+  top: 12px;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid rgb(var(--color-cyan));
+  outline-offset: 2px;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 88px;
+  -webkit-text-size-adjust: 100%;
+}
+
+html, body {
+  -webkit-overflow-scrolling: touch;
+}
 
 /* depth-mode attributes kept for backwards compat but no longer drive 3D */
 
@@ -57,6 +95,7 @@ body {
   overflow-x: hidden;
   min-height: 100vh;
   transition: background 0.4s ease, color 0.3s ease;
+  text-rendering: optimizeLegibility;
 }
 
 /* ── Light mode body background ─────────────────────────────── */
@@ -66,6 +105,7 @@ body {
     radial-gradient(circle at 82% 78%, rgba(6, 182, 212, 0.05), transparent 35%),
     radial-gradient(circle at 58% 5%,  rgba(217, 70, 239, 0.04), transparent 30%),
     linear-gradient(170deg, #eef2ff 0%, #f0f4ff 55%, #f8fafc 100%);
+  color: rgb(var(--color-light));
 }
 
 section {
@@ -112,6 +152,10 @@ section::before {
   background: linear-gradient(180deg, rgba(3, 7, 18, 0.15), rgba(3, 7, 18, 0.40));
   pointer-events: none;
   z-index: -1;
+}
+
+.light section::before {
+  background: transparent;
 }
 
 ::-webkit-scrollbar { width: 4px; }
@@ -273,8 +317,59 @@ section::before {
   animation: pulse-ring 2s ease-out infinite;
 }
 
-.cursor-glow {
-  cursor: none;
+@media (max-width: 768px) {
+  body {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  .noise::before {
+    opacity: 0.04;
+  }
+
+  body::after {
+    display: none;
+  }
+
+  .glitch-anim,
+  .glitch-text::before,
+  .glitch-text::after {
+    animation: none !important;
+  }
+
+  .glass {
+    backdrop-filter: blur(12px) saturate(130%);
+  }
+
+  .sr-section {
+    transform: translateY(28px);
+    transition-duration: 0.45s;
+    will-change: auto;
+  }
+
+  [data-sr-child] {
+    transform: translateY(16px);
+    transition-duration: 0.4s;
+  }
+}
+
+@media (max-width: 768px) and (prefers-reduced-motion: no-preference) {
+  .sr-section,
+  [data-sr-child] {
+    transition-duration: 0.3s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *, *::before, *::after {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* ─── Glitch animations ──────────────────────────────────────────────────── */
@@ -390,9 +485,66 @@ body::after {
 
 /* ── Light mode glass ────────────────────────────────────────── */
 .light .glass {
-  background: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.80);
   backdrop-filter: blur(22px) saturate(140%);
-  border: 1px solid rgba(109, 40, 217, 0.15);
+  border: 1px solid rgba(109, 40, 217, 0.18);
+  color: rgb(var(--color-light));
+}
+
+/* ── Light mode text visibility fixes ───────────────────────── */
+.light .text-light,
+.light [class*="text-light"] {
+  color: rgb(15, 23, 42) !important;
+}
+
+.light .text-muted,
+.light [class*="text-muted"] {
+  color: rgb(71, 85, 105) !important;
+}
+
+.light .font-mono.text-muted {
+  color: rgb(71, 85, 105) !important;
+}
+
+/* Ensure headings are dark in light mode */
+.light h1, .light h2, .light h3, .light h4 {
+  color: rgb(15, 23, 42);
+}
+
+/* Cards and surfaces in light mode */
+.light .glass p,
+.light .glass span,
+.light .glass div {
+  color: rgb(var(--color-light));
+}
+
+/* Border visibility in light mode */
+.light .border-border {
+  border-color: rgb(203, 213, 225);
+}
+
+/* Input fields in light mode */
+.light input,
+.light textarea,
+.light select {
+  background: rgba(248, 250, 252, 0.9) !important;
+  color: rgb(15, 23, 42) !important;
+  border-color: rgb(203, 213, 225) !important;
+}
+
+.light input::placeholder,
+.light textarea::placeholder {
+  color: rgb(148, 163, 184) !important;
+}
+
+/* Surface backgrounds in light mode */
+.light .bg-surface\/70,
+.light .bg-surface\/60 {
+  background: rgba(241, 245, 249, 0.85) !important;
+}
+
+.light .bg-bg\/50 {
+  background: rgba(248, 250, 252, 0.9) !important;
 }
 
 /* ── Light mode gradient border card ────────────────────────── */

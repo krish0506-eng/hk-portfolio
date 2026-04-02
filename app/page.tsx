@@ -7,6 +7,7 @@ import WhyWorkWithMe from "@/components/WhyWorkWithMe";
 import About from "@/components/About";
 import Skills from "@/components/Skills";
 import Projects from "@/components/Projects";
+import Research from "@/components/Research";
 import Experience from "@/components/Experience";
 import Certifications from "@/components/Certifications";
 import Achievements from "@/components/Achievements";
@@ -16,14 +17,12 @@ import Footer from "@/components/Footer";
 import ThreeBackdrop from "@/components/ThreeBackdrop";
 import ScrollDepthEngine from "@/components/ScrollDepthEngine";
 import AIChatAgent from "@/components/AIChatAgent";
-import CustomCursor from "@/components/CustomCursor";
 import SiteLoader from "@/components/SiteLoader";
 
 export default function Home() {
   return (
-    <main className="relative isolate overflow-x-hidden">
+    <main id="main-content" role="main" aria-label="Portfolio content" className="relative isolate overflow-x-hidden">
       <SiteLoader />
-      <CustomCursor />
       <ThreeBackdrop />
       <ScrollDepthEngine />
       <ScrollProgressBar />
@@ -34,6 +33,7 @@ export default function Home() {
       <About />
       <Skills />
       <Projects />
+      <Research />
       <Experience />
       <Certifications />
       <Achievements />

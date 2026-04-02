@@ -9,11 +9,11 @@ type Message = {
 };
 
 const SUGGESTED = [
-  "What projects have you built?",
-  "What tech do you use?",
-  "Can you build my app?",
-  "Tell me about FlowMind AI",
-  "Are you available for hire?",
+  "What projects has he built?",
+  "What's his tech stack?",
+  "Tell me about Mind Mate",
+  "Is he available for hire?",
+  "What's his research work?",
 ];
 
 export default function AIChatAgent() {
@@ -21,11 +21,12 @@ export default function AIChatAgent() {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      text: "I'm HK AI — I can explain projects, tech stack, and help you plan your app. What would you like to know? ⚡",
+      text: "Hey! I'm HK AI. Ask me anything about Hari Krishnaa — his projects, skills, research, or how to work with him.",
     },
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
 
   // Keyboard easter egg: Shift + A toggles the chat (skips when user is typing in an input)
@@ -46,6 +47,7 @@ export default function AIChatAgent() {
 
   const send = async (text: string) => {
     if (!text.trim() || loading) return;
+    setError("");
     const userMsg: Message = { role: "user", text };
     setMessages((prev) => [...prev, userMsg]);
     setInput("");
@@ -58,11 +60,15 @@ export default function AIChatAgent() {
         body: JSON.stringify({ message: text }),
       });
       const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data?.error || "Chat service unavailable");
+      }
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", text: data.reply ?? "Sorry, I couldn't process that right now." },
+        { role: "assistant", text: data.reply ?? "Something went wrong on my end. Try again in a moment." },
       ]);
     } catch {
+      setError("Assistant is temporarily unavailable. Please try again in a moment.");
       setMessages((prev) => [
         ...prev,
         { role: "assistant", text: "Hmm, something went wrong. Try again or email krishnaahari05@gmail.com directly." },
@@ -111,6 +117,7 @@ export default function AIChatAgent() {
             boxShadow: "0 0 30px rgba(139,92,246,0.35), 0 8px 32px rgba(0,0,0,0.4)",
           }}
           aria-label="Open AI Chat (or press Shift+A)"
+          aria-expanded={open}
         >
           <AnimatePresence mode="wait">
             {open ? (
@@ -189,6 +196,9 @@ export default function AIChatAgent() {
 
             {/* Messages */}
             <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3 scrollbar-hide" style={{ minHeight: 200, maxHeight: "calc(70vh - 160px)" }}>
+              <div className="sr-only" role="status" aria-live="polite">
+                {loading ? "Assistant is typing" : "Assistant ready"}
+              </div>
               {messages.map((msg, i) => (
                 <motion.div
                   key={i}
@@ -264,9 +274,15 @@ export default function AIChatAgent() {
 
             {/* Input */}
             <div
-              className="flex items-center gap-2 px-4 py-3 border-t"
+              className="relative flex items-center gap-2 px-4 py-3 border-t"
               style={{ borderColor: "rgba(139,92,246,0.20)" }}
             >
+              {error && (
+                <div className="absolute left-4 right-4 -top-9 rounded-lg border px-3 py-1.5 text-xs"
+                  style={{ background: "rgba(190,24,93,0.14)", borderColor: "rgba(244,63,94,0.35)", color: "rgb(254,205,211)" }}>
+                  {error}
+                </div>
+              )}
               <input
                 type="text"
                 value={input}
@@ -274,6 +290,7 @@ export default function AIChatAgent() {
                 onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && send(input)}
                 placeholder="Ask anything about HK..."
                 className="flex-1 bg-transparent text-sm font-body text-light placeholder:text-muted outline-none"
+                aria-label="Ask HK AI a question"
               />
               <motion.button
                 onClick={() => send(input)}
@@ -285,6 +302,7 @@ export default function AIChatAgent() {
                   background: "linear-gradient(135deg, rgba(139,92,246,0.7), rgba(6,182,212,0.6))",
                   border: "1px solid rgba(139,92,246,0.4)",
                 }}
+                aria-label="Send message"
               >
                 <FiSend size={14} className="text-white" />
               </motion.button>

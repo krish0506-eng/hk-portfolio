@@ -14,8 +14,6 @@ interface Particle {
 }
 
 const PALETTE = ["#8b5cf6", "#06b6d4", "#d946ef", "#f59e0b", "#4f8eff", "#10b981"];
-const CONNECTION_DIST = 160;
-const PARTICLE_COUNT = 100;
 
 function randomBetween(a: number, b: number) {
   return a + Math.random() * (b - a);
@@ -34,6 +32,12 @@ export default function ThreeBackdrop() {
     let animId: ReturnType<typeof requestAnimationFrame> | null = null;
     let W = window.innerWidth;
     let H = window.innerHeight;
+    const isTouchOrSmall = window.matchMedia("(max-width: 768px), (pointer: coarse)").matches;
+    const lowEndDevice = (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4)
+      || ((navigator as Navigator & { deviceMemory?: number }).deviceMemory !== undefined
+        && ((navigator as Navigator & { deviceMemory?: number }).deviceMemory ?? 8) <= 4);
+    const particleCount = isTouchOrSmall ? (lowEndDevice ? 20 : 34) : 100;
+    const connectionDist = isTouchOrSmall ? (lowEndDevice ? 82 : 100) : 160;
     let mouseX = W / 2;
     let mouseY = H / 2;
     let reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -42,7 +46,7 @@ export default function ThreeBackdrop() {
     canvas.height = H;
 
     // Build particles
-    const particles: Particle[] = Array.from({ length: PARTICLE_COUNT }, () => ({
+    const particles: Particle[] = Array.from({ length: particleCount }, () => ({
       x: randomBetween(0, W),
       y: randomBetween(0, H),
       vx: randomBetween(-0.28, 0.28),
@@ -77,8 +81,8 @@ export default function ThreeBackdrop() {
           const dx = particles[i].x - particles[j].x;
           const dy = particles[i].y - particles[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < CONNECTION_DIST) {
-            const lineAlpha = (1 - dist / CONNECTION_DIST) * 0.22;
+          if (dist < connectionDist) {
+            const lineAlpha = (1 - dist / connectionDist) * (isTouchOrSmall ? 0.15 : 0.22);
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);

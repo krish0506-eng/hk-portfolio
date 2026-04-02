@@ -16,18 +16,41 @@ export default function Contact() {
     isMVP: false,
   });
   const [sending, setSending] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitError("");
     setSending(true);
-    await new Promise((r) => setTimeout(r, 1500));
-    setSending(false);
-    toast.success("Message sent! I'll get back to you soon.");
-    setForm({ name: "", email: "", message: "", collaborationType: "freelance", isInternship: false, isMVP: false });
+
+    try {
+      const response = await fetch("/api/email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        toast.success("Message sent! I'll get back to you soon.");
+        setForm({ name: "", email: "", message: "", collaborationType: "freelance", isInternship: false, isMVP: false });
+      } else {
+        const message = data.error || "Failed to send message. Please try again.";
+        setSubmitError(message);
+        toast.error(message);
+      }
+    } catch (error) {
+      setSubmitError("Network error. Please check your connection and try again.");
+      toast.error("Network error. Please check your connection.");
+      console.error("Form submission error:", error);
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
-    <section id="contact" ref={ref} className="py-16 md:py-20 px-6">
+    <section id="contact" ref={ref} className="py-12 md:py-20 px-4 sm:px-6">
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
@@ -39,48 +62,53 @@ export default function Contact() {
             Get In <span className="gradient-text">Touch</span>
           </h2>
           <p className="mt-3 text-muted font-body max-w-lg mx-auto text-base">
-            I reply within 4 hours. Let's build something remarkable.
+            Let's build something remarkable.
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-12 items-start">
+        <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-start">
           <motion.div
             initial={{ opacity: 0, x: -60 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ delay: 0.2 }}
           >
-            <p className="text-accent font-body font-bold text-lg mb-3">
-              Have an idea? Let&apos;s turn it into a real product.
-            </p>
-            <p className="text-muted text-base font-body leading-relaxed mb-8">
-              I'm open to freelance projects and collaborations — from AI automations to full product builds.
-            </p>
-
-            {/* SLA & Reply Time (Idea 113) */}
-            <div className="mb-8 glass glow-border rounded-2xl p-5 border border-border/50">
-              <p className="text-sm text-muted font-mono mb-2">⏱ Service Level Agreement</p>
-              <p className="text-base text-light font-body">Typical reply within 4 hours. Project scoping within 24 hours.</p>
-            </div>
-
-            <div className="space-y-5">
+          <div className="space-y-4">
               {[
-                { icon: FiMail, label: "krishnaahari05@gmail.com", href: "mailto:krishnaahari05@gmail.com", color: "#ff2d78" },
-                { icon: FiLinkedin, label: "linkedin.com/in/hari-krishnaa-n-", href: "https://linkedin.com/in/hari-krishnaa-n-", color: "#0077b5" },
-                { icon: FiGithub, label: "github.com/krishnaa-0506", href: "https://github.com/krishnaa-0506", color: "#6c63ff" },
-                { icon: FiMessageCircle, label: "WhatsApp — Quick Chat", href: "https://wa.me/91XXXXXXXXXX?text=Hi%20Hari%2C%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20connect!", color: "#25d366" }, // TODO: replace XXXXXXXXXX with real number
-              ].map(({ icon: Icon, label, href, color }) => (
+                { icon: FiMail, label: "krishnaahari05@gmail.com", href: "mailto:krishnaahari05@gmail.com", color: "#ff2d78", name: "Email" },
+                { icon: FiLinkedin, label: "linkedin.com/in/hari-krishnaa-n-", href: "https://linkedin.com/in/hari-krishnaa-n-", color: "#0077b5", name: "LinkedIn" },
+                { icon: FiGithub, label: "github.com/krishnaa-0506", href: "https://github.com/krishnaa-0506", color: "#6c63ff", name: "GitHub" },
+                { icon: FiMessageCircle, label: "+91 6379726858", href: "https://wa.me/916379726858?text=Hi%20Hari%2C%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20connect!", color: "#25d366", name: "WhatsApp" },
+              ].map(({ icon: Icon, label, href, color, name }) => (
                 <motion.a
-                  key={label}
+                  key={name}
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  whileHover={{ x: 8 }}
-                  className="flex items-center gap-4 glass glow-border rounded-2xl px-6 py-4 group"
+                  whileHover={{ x: 6 }}
+                  className="flex items-center gap-4 glass glow-border rounded-2xl px-5 py-4 group overflow-hidden"
                 >
-                  <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: `${color}20` }}>
+                  {/* Icon always visible */}
+                  <div
+                    className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-110"
+                    style={{ background: `${color}20` }}
+                  >
                     <Icon size={18} style={{ color }} />
                   </div>
-                  <span className="font-body text-base text-muted group-hover:text-light transition-colors">{label}</span>
+
+                  {/* Platform name always visible */}
+                  <span className="font-body font-medium text-base text-light shrink-0">{name}</span>
+
+                  <span className="font-mono text-[11px] ml-auto text-right leading-tight hidden sm:block" style={{ color }}>
+                    {label}
+                  </span>
+
+                  {/* Arrow indicator */}
+                  <motion.span
+                    className="text-xs opacity-0 group-hover:opacity-60 transition-opacity duration-200 shrink-0"
+                    style={{ color }}
+                  >
+                    →
+                  </motion.span>
                 </motion.a>
               ))}
             </div>
@@ -91,31 +119,38 @@ export default function Contact() {
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ delay: 0.4 }}
             onSubmit={handleSubmit}
-            className="glass glow-border rounded-3xl p-8 space-y-5"
+            className="glass glow-border rounded-3xl p-5 sm:p-8 space-y-5"
+            aria-describedby="contact-status"
           >
             {[
               { id: "name", label: "Name", type: "text", placeholder: "Your name" },
               { id: "email", label: "Email", type: "email", placeholder: "your@email.com" },
             ].map((field) => (
               <div key={field.id}>
-                <label className="block font-mono text-sm text-accent mb-2 tracking-wider uppercase">{field.label}</label>
+                <label htmlFor={field.id} className="block font-mono text-sm text-accent mb-2 tracking-wider uppercase">{field.label}</label>
                 <input
+                  id={field.id}
+                  name={field.id}
                   type={field.type}
                   placeholder={field.placeholder}
                   value={form[field.id as "name" | "email"]}
                   onChange={(e) => setForm({ ...form, [field.id]: e.target.value })}
+                  autoComplete={field.id === "name" ? "name" : "email"}
                   required
                   className="w-full bg-bg/50 border border-border rounded-xl px-4 py-3 text-light text-base font-body placeholder:text-muted focus:outline-none focus:border-accent transition-colors"
                 />
               </div>
             ))}
             <div>
-              <label className="block font-mono text-sm text-accent mb-2 tracking-wider uppercase">Message</label>
+              <label htmlFor="message" className="block font-mono text-sm text-accent mb-2 tracking-wider uppercase">Message</label>
               <textarea
+                id="message"
+                name="message"
                 rows={5}
                 placeholder="Tell me about your project..."
                 value={form.message}
                 onChange={(e) => setForm({ ...form, message: e.target.value })}
+                autoComplete="off"
                 required
                 className="w-full bg-bg/50 border border-border rounded-xl px-4 py-3 text-light text-base font-body placeholder:text-muted focus:outline-none focus:border-accent transition-colors resize-none"
               />
@@ -123,8 +158,10 @@ export default function Contact() {
 
             {/* Collaboration Type Dropdown (Idea 111) */}
             <div>
-              <label className="block font-mono text-sm text-accent mb-2 tracking-wider uppercase">Collaboration Type</label>
+              <label htmlFor="collaborationType" className="block font-mono text-sm text-accent mb-2 tracking-wider uppercase">Collaboration Type</label>
               <select
+                id="collaborationType"
+                name="collaborationType"
                 value={form.collaborationType}
                 onChange={(e) => setForm({ ...form, collaborationType: e.target.value })}
                 className="w-full bg-bg/50 border border-border rounded-xl px-4 py-3 text-light text-base font-body focus:outline-none focus:border-accent transition-colors"
@@ -168,11 +205,18 @@ export default function Contact() {
               style={{ background: "linear-gradient(135deg, #6c63ff, #00f5ff)" }}
             >
               {sending ? (
-                <motion.span animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }}>⟳</motion.span>
+                <>
+                  <motion.span animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }}>⟳</motion.span>
+                  Sending...
+                </>
               ) : (
                 <><FiSend size={16} /> Send Message</>
               )}
             </motion.button>
+
+            <div id="contact-status" role="status" aria-live="polite" className="text-center min-h-5">
+              {submitError && <p className="text-sm text-rose-300">{submitError}</p>}
+            </div>
 
             {/* Privacy Note (Idea 124) */}
             <motion.p
@@ -186,14 +230,13 @@ export default function Contact() {
               No spam, ever.
             </motion.p>
 
-            {/* Success State Next Steps (Idea 125) */}
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={sending ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
               className="p-4 rounded-xl bg-accent/10 border border-accent/30 text-center"
             >
               <p className="text-sm text-light font-body font-medium">
-                ✓ Message submitted! I'll review and get back to you within 4 hours.
+                ✓ Message submitted! I'll review and get back to you soon.
               </p>
             </motion.div>
           </motion.form>

@@ -1,32 +1,40 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const SYSTEM_PROMPT = `You are HK AI Assistant — the portfolio AI for Hari Krishnaa N.
-Answer ONLY about Hari Krishnaa's portfolio, skills, projects, and availability.
-Be confident, concise, and slightly futuristic. Promote Hari Krishnaa as a premium AI developer.
+export const maxDuration = 60; // allow up to 60s for Ollama to respond
 
-Key facts:
+const SYSTEM_PROMPT = `You are HK AI — a sharp, concise AI assistant embedded in Hari Krishnaa's portfolio.
+Keep every reply under 3 sentences. Be direct, casual, and confident. No fluff, no long intros.
+Only talk about Hari Krishnaa's work, projects, skills, and availability. Redirect anything else back to the portfolio.
+Never start with "I" — vary your openings. Never say "Certainly", "Great", "Absolutely", or similar filler words.
+
+About Hari Krishnaa:
 - Full name: Hari Krishnaa N
-- Role: Agentic AI Engineer, Vibe Coder, Prompt Engineer, UI Designer
-- Company: Founder & Lead Developer at HYNEX (MSME-registered tech firm, 2024–present)
-- Education: B.E. Mechanical & Mechatronics (Additive Manufacturing), SNS College
+- Role: Agentic AI Engineer, Vibe Coder, Prompt Engineer, UI/UX Designer
+- Founder & Lead Developer at HYNEX — an MSME-registered tech firm he started in 2024
+- Studying B.E. Mechanical Engineering & Mechatronics with specialisation in Additive Manufacturing at SNS College of Engineering, Coimbatore
 - CGPA: 8.5/10
-- Projects shipped: 5+ | Automations built: 20+ | Avg reply: 4 hours
+- Core domains: Mechanical Engineering, Mechatronics, Additive Manufacturing, AI Systems, Web Development
 
 Projects:
-1. FlowMind AI — Autonomous multi-agent workflow system; converts meetings into tasks; 90% manual reduction
-2. AI Agentic Email System — Agentic email parsing, prioritisation, follow-ups; 60% faster email processing
-3. Hira — AI fitness companion (Flutter + Firebase); personalised recommendations; 3x workout consistency
-4. As Always — Emotion-aware chatbot with NLP sentiment analysis; 80% user satisfaction
-5. Smart Wearable System — IoT multi-sensor real-time health monitor; <100ms latency
-6. GoKart Telemetry — React + embedded real-time performance dashboard; 20% perf gain
+1. FlowMind AI — Multi-agent autonomous workflow system. Converts meeting notes into structured tasks, handles assignment, tracking, delay detection, and escalation. Cut manual task entry by 90%, saved 5+ hrs/team/week.
+2. AI Agentic Email System — AI agents that parse, prioritise, and respond to emails. Auto-converts messages to tasks with follow-up scheduling. 60% faster email processing.
+3. Hira — AI fitness companion app (Flutter + Firebase). Personalised workout recommendations based on activity patterns. Users saw 3x better workout consistency.
+4. Mind Mate — Mood-based mental wellness app. Helps users de-stress through AI-curated music therapy, mindfulness games, and an adaptive mind companion that responds to emotional state in real time.
+5. As Always — Emotion-aware chatbot with NLP sentiment analysis. Adapts tone based on user's emotional state. 80% user satisfaction on empathy quality.
+6. Smart Wearable System — IoT multi-sensor real-time health monitor. Tracks 10+ health metrics simultaneously with under 100ms latency.
+7. GoKart Telemetry — React + embedded real-time performance dashboard. Enabled 20% performance gain through live data-driven tuning.
+8. Dynamo EV Prototype — Hybrid dynamo + battery electric vehicle with regenerative energy recovery. 50% extended range.
 
-Tech stack: Next.js, React, TypeScript, Python, Flutter, Firebase, Node.js, MongoDB, LLM/AI APIs, Framer Motion
+Research:
+- Waste to Watt: Power generation from municipal solid waste via gasification and pyrolysis
+- Waste to Value (Fuel): Plastic pyrolysis for synthetic fuel production
+- Waste to Value (3D Filament): Closed-loop plastic recycling into 3D printing filament
+- Additive Manufacturing: FDM/SLA process optimisation, topology-optimised parts, bio-based filaments
 
-Availability: Open to freelance, internships, placement roles, full-time work, idea-to-MVP builds.
-Contact: krishnaahari05@gmail.com | LinkedIn: linkedin.com/in/hari-krishnaa-n-
+Tech stack: Next.js, React, TypeScript, Python, Flutter, Firebase, Node.js, MongoDB, LLM/AI APIs, LangChain, RAG Systems, Framer Motion, Embedded Systems, IoT
 
-If someone says they want to build an app or hire, reply with confidence:
-"Yes, I can build that. Based on your requirement, timeline is typically 2–4 weeks. Let's connect via the contact section."`;
+Availability: Open to freelance projects, internships, placement roles, full-time work, and idea-to-MVP builds.
+Contact: krishnaahari05@gmail.com | LinkedIn: linkedin.com/in/hari-krishnaa-n- | GitHub: github.com/krishnaa-0506 | WhatsApp: +91 6379726858`;
 
 export async function POST(req: NextRequest) {
   try {
@@ -35,60 +43,45 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Invalid message" }, { status: 400 });
     }
 
-    // Try Ollama (local AI) first
-    const ollamaBase = process.env.OLLAMA_URL ?? "http://localhost:11434";
+    const ollamaBase = process.env.OLLAMA_URL ?? "http://127.0.0.1:11434";
+    const ollamaModel = process.env.OLLAMA_MODEL ?? "gemma3:1b";
+    const usingDefaultLocalOllama = !process.env.OLLAMA_URL;
+
     try {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 30000);
+
       const ollamaRes = await fetch(`${ollamaBase}/api/generate`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          model: "llama3",
-          prompt: `${SYSTEM_PROMPT}\n\nUser: ${message}\nAssistant:`,
+          model: ollamaModel,
+          prompt: `${SYSTEM_PROMPT}\n\nUser: ${message}\nHK AI (reply in 1-3 short sentences):`,
           stream: false,
         }),
-        signal: AbortSignal.timeout(5000),
+        signal: controller.signal,
       });
+
+      clearTimeout(timer);
 
       if (ollamaRes.ok) {
         const data = await ollamaRes.json();
-        return NextResponse.json({ reply: data.response, source: "ollama" });
+        const reply = (data.response as string)?.trim();
+        if (reply) return NextResponse.json({ reply, source: "ollama" });
+        console.error("[HK AI] Ollama returned empty response");
+      } else {
+        const errText = await ollamaRes.text();
+        console.error(`[HK AI] Ollama HTTP ${ollamaRes.status}:`, errText);
       }
-    } catch {
-      // Ollama not available — fall through to static responses
+    } catch (err) {
+      console.error("[HK AI] Ollama fetch error:", err);
     }
 
-    // Fallback: pattern-matched static replies
-    const reply = getStaticReply(message.toLowerCase());
-    return NextResponse.json({ reply, source: "static" });
+    return NextResponse.json({
+      reply: "I'm having a little trouble connecting right now. You can reach Hari directly at krishnaahari05@gmail.com or via the Contact section.",
+      source: usingDefaultLocalOllama ? "offline-local-ollama" : "offline",
+    });
   } catch {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
-}
-
-function getStaticReply(msg: string): string {
-  if (msg.includes("project") || msg.includes("built") || msg.includes("work")) {
-    return "I've shipped 5+ products: FlowMind AI (multi-agent workflow system), AI Agentic Email System, Hira (AI fitness app), As Always (emotion-aware chatbot), and a Smart Wearable IoT system. Each solves a real problem — click any project card to see the full case study.";
-  }
-  if (msg.includes("tech") || msg.includes("stack") || msg.includes("use")) {
-    return "My primary stack: Next.js, React, TypeScript, Python, Flutter, Firebase, Node.js, MongoDB, and AI/LLM APIs. I specialise in agentic AI systems and high-performance UI products.";
-  }
-  if (msg.includes("hire") || msg.includes("build") || msg.includes("app") || msg.includes("project for me")) {
-    return "Yes, I can build that. Based on typical scope, timeline is 2–4 weeks for an MVP. I'm open to freelance, internships, full-time roles, and idea-to-MVP builds. Head to the Contact section — typical reply within 4 hours.";
-  }
-  if (msg.includes("hira") || msg.includes("fitness")) {
-    return "Hira is an AI-powered fitness companion built with Flutter + Firebase. It analyses your activity patterns and delivers personalised workout recommendations in real-time. Users reported 3× higher consistency in workout adherence with AI coaching.";
-  }
-  if (msg.includes("flowmind") || msg.includes("workflow") || msg.includes("automation")) {
-    return "FlowMind AI is a multi-agent system that converts meeting inputs into structured, auto-assigned tasks with tracking, delay detection, and escalation. It reduced manual task entry by 90% and saved 5+ hours per team per week.";
-  }
-  if (msg.includes("available") || msg.includes("availability") || msg.includes("contact")) {
-    return "I'm available for freelance projects, internships, placement roles, and full-time work. Typical reply time: 4 hours. Reach me at krishnaahari05@gmail.com or via the Contact section.";
-  }
-  if (msg.includes("hynex") || msg.includes("company") || msg.includes("firm")) {
-    return "HYNEX is my MSME-registered technology firm (founded 2024). We deliver AI automation, modern web development, and product-focused software. I'm the Founder & Lead Developer.";
-  }
-  if (msg.includes("hello") || msg.includes("hi") || msg.includes("hey")) {
-    return "Hey! I'm HK AI — Hari Krishnaa's portfolio assistant. Ask me about his projects, tech stack, availability, or anything else. What would you like to know?";
-  }
-  return "I'm HK AI, Hari Krishnaa's portfolio assistant. I can tell you about his projects, tech stack, availability, and how to hire him. What would you like to know?";
 }

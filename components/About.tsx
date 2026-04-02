@@ -4,9 +4,9 @@ import { useInView } from "react-intersection-observer";
 import { FiCode, FiCpu, FiZap, FiGlobe } from "react-icons/fi";
 
 const stats = [
-  { label: "Projects Delivered", value: "5+" },
   { label: "CGPA", value: "8.5" },
   { label: "Certifications", value: "12+" },
+  { label: "Automations Built", value: "20+" },
   { label: "Tech Domains", value: "4" },
 ];
 
@@ -42,7 +42,7 @@ export default function About() {
         >
           {/* Metric-driven opening (Idea 6) */}
           <p className="text-accent font-body font-bold text-base mb-4">
-            🎯 I've delivered 5+ shipped products, built 20+ automations, and achieved 8.5/10 CGPA while running HYNEX — my registered tech firm.
+            🎯 Built 20+ automations and achieved 8.5/10 CGPA while running HYNEX — my registered tech firm.
           </p>
 
           <p className="text-muted text-lg leading-relaxed font-body mb-5">
