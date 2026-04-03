@@ -140,7 +140,7 @@ const projects: Project[] = [
     glow: "rgba(167, 139, 250, 0.35)",
     featured: false,
     github: "https://github.com/krishnaa-0506/Mind-Mate",
-    apk: "/mind-mate.apk",
+    apk: "https://drive.google.com/uc?export=download&id=1yrxlWwiJ1Jf4V1DRZIv5Rw3o9k6P7aAL",
   },
   {
     title: "Hira v1",
@@ -422,7 +422,7 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
               <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
                 {p.github && <a href={p.github} target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", gap: 6, padding: "7px 16px", borderRadius: 12, fontSize: 12, fontFamily: "monospace", background: `${p.color}15`, color: p.color, border: `1px solid ${p.color}35`, textDecoration: "none" }}><FiGithub size={13} /> GitHub</a>}
                 {p.demo && <a href={p.demo} target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", gap: 6, padding: "7px 16px", borderRadius: 12, fontSize: 12, fontFamily: "monospace", background: `${p.color}15`, color: p.color, border: `1px solid ${p.color}35`, textDecoration: "none" }}><FiExternalLink size={13} /> Live Demo</a>}
-                {p.apk && <a href={p.apk} download style={{ display: "flex", alignItems: "center", gap: 6, padding: "7px 16px", borderRadius: 12, fontSize: 12, fontFamily: "monospace", background: `${p.color}15`, color: p.color, border: `1px solid ${p.color}35`, textDecoration: "none" }}><FiDownload size={13} /> Download APK</a>}
+                {p.apk && <a href={p.apk} target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", gap: 6, padding: "7px 16px", borderRadius: 12, fontSize: 12, fontFamily: "monospace", background: `${p.color}15`, color: p.color, border: `1px solid ${p.color}35`, textDecoration: "none" }}><FiDownload size={13} /> Download APK</a>}
               </div>
             )}
 
