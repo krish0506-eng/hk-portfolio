@@ -21,7 +21,6 @@
       "preview": true
     }
   },
-  "analytics": true,
   "webAnalytics": {
     "enabled": true
   }
