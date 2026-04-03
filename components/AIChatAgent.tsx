@@ -21,7 +21,7 @@ export default function AIChatAgent() {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      text: "Hey! I'm HK AI. Ask me anything about Hari Krishnaa — his projects, skills, research, or how to work with him.",
+      text: "Hey! I'm Hari's portfolio assistant. Ask me anything about his projects, skills, research, or availability.",
     },
   ]);
   const [input, setInput] = useState("");
@@ -63,12 +63,9 @@ export default function AIChatAgent() {
       if (!res.ok) {
         throw new Error(data?.error || "Chat service unavailable");
       }
-      setMessages((prev) => [
-        ...prev,
-        { role: "assistant", text: data.reply ?? "Something went wrong on my end. Try again in a moment." },
-      ]);
+      setMessages((prev) => [...prev, { role: "assistant", text: data.reply ?? "I could not find a matching portfolio answer right now." }]);
     } catch {
-      setError("Assistant is temporarily unavailable. Please try again in a moment.");
+      setError("Portfolio assistant is temporarily unavailable. Please try again in a moment.");
       setMessages((prev) => [
         ...prev,
         { role: "assistant", text: "Hmm, something went wrong. Try again or email krishnaahari05@gmail.com directly." },
@@ -99,7 +96,7 @@ export default function AIChatAgent() {
               }}
             >
               <FiZap size={11} />
-              Ask my AI assistant
+              Ask portfolio assistant
             </motion.div>
           )}
         </AnimatePresence>
@@ -116,7 +113,7 @@ export default function AIChatAgent() {
             border: "1px solid rgba(139,92,246,0.55)",
             boxShadow: "0 0 30px rgba(139,92,246,0.35), 0 8px 32px rgba(0,0,0,0.4)",
           }}
-          aria-label="Open AI Chat (or press Shift+A)"
+          aria-label="Open portfolio assistant (or press Shift+A)"
           aria-expanded={open}
         >
           <AnimatePresence mode="wait">
@@ -189,8 +186,8 @@ export default function AIChatAgent() {
                   style={{ boxShadow: "0 0 6px rgba(6,182,212,0.9)" }} />
               </div>
               <div>
-                <p className="font-display font-bold text-sm text-light leading-none">HK AI</p>
-                <p className="font-mono text-xs mt-0.5" style={{ color: "#06b6d4" }}>Portfolio Assistant · Online</p>
+                <p className="font-display font-bold text-sm text-light leading-none">Portfolio Assistant</p>
+                <p className="font-mono text-xs mt-0.5" style={{ color: "#06b6d4" }}>Portfolio Assistant · Local</p>
               </div>
             </div>
 
@@ -290,7 +287,7 @@ export default function AIChatAgent() {
                 onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && send(input)}
                 placeholder="Ask anything about HK..."
                 className="flex-1 bg-transparent text-sm font-body text-light placeholder:text-muted outline-none"
-                aria-label="Ask HK AI a question"
+                aria-label="Ask the portfolio assistant a question"
               />
               <motion.button
                 onClick={() => send(input)}
