@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import { FiSend } from "react-icons/fi";
+import { FiSend, FiMail, FiGithub, FiLinkedin, FiMessageCircle } from "react-icons/fi";
 import { toast } from "sonner";
 
 export default function Contact() {
@@ -81,15 +81,18 @@ export default function Contact() {
                 </p>
               </div>
 
-              <div className="grid gap-3">
+              <div className="grid grid-cols-2 gap-3">
                 {[
-                  "Project inquiries",
-                  "Freelance and collaboration requests",
-                  "Internship and placement opportunities",
-                  "Idea-to-MVP builds",
-                ].map((item) => (
-                  <div key={item} className="rounded-2xl border border-border/60 bg-bg/40 px-4 py-3 text-sm text-light font-body">
-                    {item}
+                  { icon: FiMail, label: "Email" },
+                  { icon: FiLinkedin, label: "LinkedIn" },
+                  { icon: FiGithub, label: "GitHub" },
+                  { icon: FiMessageCircle, label: "WhatsApp" },
+                ].map(({ icon: Icon, label }) => (
+                  <div key={label} className="rounded-2xl border border-border/60 bg-bg/40 px-4 py-4 flex items-center gap-3 text-sm text-light font-body">
+                    <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style={{ background: "rgba(108,99,255,0.14)" }}>
+                      <Icon size={18} className="text-accent" />
+                    </div>
+                    <span>{label}</span>
                   </div>
                 ))}
               </div>
