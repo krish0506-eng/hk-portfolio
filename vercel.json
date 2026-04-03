@@ -20,8 +20,5 @@
       "production": true,
       "preview": true
     }
-  },
-  "webAnalytics": {
-    "enabled": true
   }
 }
