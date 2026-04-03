@@ -3,18 +3,6 @@
   "devCommand": "next dev",
   "outputDirectory": ".next",
   "framework": "nextjs",
-  "functions": {
-    "api/chat/route.ts": {
-      "maxDuration": 30
-    }
-  },
-  "env": {
-    "OLLAMA_URL": "@ollama_url",
-    "NEXT_PUBLIC_EMAILJS_SERVICE_ID": "@emailjs_service_id",
-    "NEXT_PUBLIC_EMAILJS_TEMPLATE_ID": "@emailjs_template_id",
-    "NEXT_PUBLIC_EMAILJS_PUBLIC_KEY": "@emailjs_public_key",
-    "NEXT_PUBLIC_SITE_URL": "@site_url"
-  },
   "git": {
     "deploymentEnabled": {
       "production": true,
