@@ -1,17 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
-// Configure SMTP transporter
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port: parseInt(process.env.SMTP_PORT || "587"),
-  secure: process.env.SMTP_PORT === "465", // true for 465, false for other ports
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
-});
-
 interface ContactFormData {
   name: string;
   email: string;
@@ -24,6 +13,28 @@ interface ContactFormData {
 export async function POST(req: NextRequest) {
   try {
     const body: ContactFormData = await req.json();
+    const smtpHost = process.env.SMTP_HOST?.trim();
+    const smtpPort = Number.parseInt(process.env.SMTP_PORT || "587", 10);
+    const smtpUser = process.env.SMTP_USER?.trim();
+    const smtpPass = process.env.SMTP_PASS?.replace(/\s+/g, "").trim();
+    const smtpFrom = process.env.SMTP_FROM?.trim() || smtpUser;
+
+    if (!smtpHost || !smtpUser || !smtpPass || !smtpFrom || Number.isNaN(smtpPort)) {
+      return NextResponse.json(
+        { error: "Email service is not configured correctly on the server." },
+        { status: 500 }
+      );
+    }
+
+    const transporter = nodemailer.createTransport({
+      host: smtpHost,
+      port: smtpPort,
+      secure: smtpPort === 465,
+      auth: {
+        user: smtpUser,
+        pass: smtpPass,
+      },
+    });
 
     // Validate required fields
     if (!body.name || !body.email || !body.message) {
@@ -42,17 +53,10 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Build email content
-    const collaborationDetails = `
-Collaboration Type: ${body.collaborationType}
-Internship Opportunity: ${body.isInternship ? "Yes" : "No"}
-Idea-to-MVP Support: ${body.isMVP ? "Yes" : "No"}
-    `.trim();
-
     // Email to self (portfolio owner)
     const ownerMailOptions = {
-      from: process.env.SMTP_FROM,
-      to: process.env.SMTP_FROM, // Send to yourself
+      from: smtpFrom,
+      to: smtpFrom, // Send to yourself
       subject: `New Contact Form Submission from ${body.name}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9; border-radius: 8px;">
@@ -96,7 +100,7 @@ Received at: ${new Date().toLocaleString()}
 
     // Acknowledgment email to visitor
     const visitorMailOptions = {
-      from: process.env.SMTP_FROM,
+      from: smtpFrom,
       to: body.email,
       subject: "Got your message! 🚀 — Hari Krishnaa",
       html: `
@@ -149,12 +153,14 @@ harikrishnaa.dev
 
     // Send both emails
     try {
+      await transporter.verify();
       await transporter.sendMail(ownerMailOptions);
       await transporter.sendMail(visitorMailOptions);
     } catch (emailError) {
       console.error("Email sending error:", emailError);
+      const errorMessage = emailError instanceof Error ? emailError.message : "Unknown SMTP error";
       return NextResponse.json(
-        { error: "Failed to send email. Please try again later." },
+        { error: `Failed to send email. ${errorMessage}` },
         { status: 500 }
       );
     }
