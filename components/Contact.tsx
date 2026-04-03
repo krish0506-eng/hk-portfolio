@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import { FiMail, FiGithub, FiLinkedin, FiSend, FiMessageCircle } from "react-icons/fi";
+import { FiSend } from "react-icons/fi";
 import { toast } from "sonner";
 
 export default function Contact() {
@@ -72,45 +72,27 @@ export default function Contact() {
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ delay: 0.2 }}
           >
-          <div className="space-y-4">
-              {[
-                { icon: FiMail, label: "krishnaahari05@gmail.com", href: "mailto:krishnaahari05@gmail.com", color: "#ff2d78", name: "Email" },
-                { icon: FiLinkedin, label: "linkedin.com/in/hari-krishnaa-n-", href: "https://linkedin.com/in/hari-krishnaa-n-", color: "#0077b5", name: "LinkedIn" },
-                { icon: FiGithub, label: "github.com/krishnaa-0506", href: "https://github.com/krishnaa-0506", color: "#6c63ff", name: "GitHub" },
-                { icon: FiMessageCircle, label: "+91 6379726858", href: "https://wa.me/916379726858?text=Hi%20Hari%2C%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20connect!", color: "#25d366", name: "WhatsApp" },
-              ].map(({ icon: Icon, label, href, color, name }) => (
-                <motion.a
-                  key={name}
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  whileHover={{ x: 6 }}
-                  className="flex items-center gap-4 glass glow-border rounded-2xl px-5 py-4 group overflow-hidden"
-                >
-                  {/* Icon always visible */}
-                  <div
-                    className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-110"
-                    style={{ background: `${color}20` }}
-                  >
-                    <Icon size={18} style={{ color }} />
+            <div className="glass glow-border rounded-3xl p-6 sm:p-8 h-full flex flex-col justify-between gap-6">
+              <div>
+                <span className="font-mono text-accent text-sm tracking-widest uppercase">Direct Contact</span>
+                <h3 className="font-display font-bold text-2xl text-light mt-3">Send a brief and I’ll route it to the right place.</h3>
+                <p className="mt-4 text-muted font-body leading-relaxed text-base">
+                  Use the form to share project details, internship opportunities, or MVP ideas. The contact section no longer lists personal handles here.
+                </p>
+              </div>
+
+              <div className="grid gap-3">
+                {[
+                  "Project inquiries",
+                  "Freelance and collaboration requests",
+                  "Internship and placement opportunities",
+                  "Idea-to-MVP builds",
+                ].map((item) => (
+                  <div key={item} className="rounded-2xl border border-border/60 bg-bg/40 px-4 py-3 text-sm text-light font-body">
+                    {item}
                   </div>
-
-                  {/* Platform name always visible */}
-                  <span className="font-body font-medium text-base text-light shrink-0">{name}</span>
-
-                  <span className="font-mono text-[11px] ml-auto text-right leading-tight hidden sm:block" style={{ color }}>
-                    {label}
-                  </span>
-
-                  {/* Arrow indicator */}
-                  <motion.span
-                    className="text-xs opacity-0 group-hover:opacity-60 transition-opacity duration-200 shrink-0"
-                    style={{ color }}
-                  >
-                    →
-                  </motion.span>
-                </motion.a>
-              ))}
+                ))}
+              </div>
             </div>
           </motion.div>
 
