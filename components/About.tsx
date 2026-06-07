@@ -69,7 +69,7 @@ export default function About() {
             I'm an <span className="text-light font-medium">embedded systems builder and IoT engineer</span> currently
             pursuing B.E. Mechanical & Mechatronics (Additive Manufacturing) at SNS College of
             Engineering, Coimbatore — with a CGPA of{" "}
-            <span className="text-accent font-medium">8/10</span>.
+            <span className="text-accent font-medium">8.5/10</span>.
           </p>
           <p className="text-muted text-lg leading-relaxed font-body mb-5">
             I founded <span className="text-cyan font-medium">HYNEX</span>, an MSME-registered

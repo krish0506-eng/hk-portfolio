@@ -7,9 +7,11 @@ export function useCounter(end: number | string, duration = 1500, enabled = true
 
   useEffect(() => {
     if (!enabled) { setValue(Number(end)); return; }
-    const raw = typeof end === "string" ? parseInt(end) : end;
+    const raw = typeof end === "string" ? parseFloat(end) : end;
     const target = isNaN(raw) ? 0 : raw;
     if (target <= 0) { setValue(target); return; }
+
+    const isFloat = target !== Math.floor(target);
 
     startTime.current = performance.now();
 
@@ -17,8 +19,8 @@ export function useCounter(end: number | string, duration = 1500, enabled = true
       const elapsed = now - startTime.current;
       const progress = Math.min(elapsed / duration, 1);
       const eased = 1 - Math.pow(1 - progress, 3);
-      const current = Math.round(eased * target);
-      setValue(current);
+      const current = eased * target;
+      setValue(isFloat ? Math.round(current * 10) / 10 : Math.round(current));
       if (progress < 1) requestAnimationFrame(animate);
     };
     requestAnimationFrame(animate);
