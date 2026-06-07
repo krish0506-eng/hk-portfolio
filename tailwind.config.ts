@@ -9,9 +9,9 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        display: ["'Cormorant Garamond'", "serif"],
-        body: ["'Jost'", "sans-serif"],
-        mono: ["'Space Mono'", "monospace"],
+        display: ["var(--font-display)", "serif"],
+        body: ["var(--font-body)", "sans-serif"],
+        mono: ["var(--font-mono)", "monospace"],
       },
       colors: {
         bg:      "rgb(var(--color-bg) / <alpha-value>)",

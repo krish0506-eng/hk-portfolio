@@ -28,6 +28,12 @@ const achievements = [
     desc: "Founded and operates HYNEX, an officially registered technology firm, while in undergraduate studies.",
     color: "#ff2d78",
   },
+  {
+    icon: FiZap,
+    title: "Smart India Hackathon Finalist",
+    desc: "Selected as a finalist in the prestigious Smart India Hackathon, competing with a hardware-integrated solution.",
+    color: "#f97316",
+  },
 ];
 
 export default function Achievements() {
@@ -41,32 +47,36 @@ export default function Achievements() {
           animate={inView ? { opacity: 1, y: 0 } : {}}
           className="text-center mb-14"
         >
-          <span className="font-mono text-accent text-sm tracking-widest uppercase">Milestones</span>
+          <span className="font-mono text-accent text-sm tracking-widest uppercase section-label">Milestones</span>
           <h2 className="font-display font-bold text-3xl md:text-4xl text-light mt-3">
             <span className="gradient-text">Achievements</span>
           </h2>          <p className="mt-4 text-muted text-base font-body max-w-2xl mx-auto">
             Milestones, competitions, and recognitions from innovative product thinking and engineering excellence.
           </p>        </motion.div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
           {achievements.map((ach, i) => (
             <motion.div
               key={ach.title}
-              initial={{ opacity: 0, y: 50 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: i * 0.15 }}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={inView ? { opacity: 1, scale: 1 } : {}}
+              transition={{ delay: i * 0.12, duration: 0.5, ease: "backOut" }}
               whileHover={{ y: -10, boxShadow: `0 20px 50px ${ach.color}25` }}
-              className="glass glow-border rounded-3xl p-6 text-center group"
+              className={`glass glow-border rounded-3xl p-6 text-center group relative overflow-hidden ${ach.title.includes("1st Place") ? "pop-in" : ""}`}
             >
+              {/* Gold shimmer for 1st Place */}
+              {ach.title.includes("1st Place") && (
+                <div className="absolute inset-0 pointer-events-none gold-shimmer rounded-3xl" />
+              )}
               <motion.div
                 whileHover={{ rotate: 15, scale: 1.2 }}
-                className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-5"
+                className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-5 relative z-10"
                 style={{ background: `${ach.color}15` }}
               >
-                <ach.icon size={28} style={{ color: ach.color }} />
+                <ach.icon size={32} style={{ color: ach.color }} />
               </motion.div>
-              <h3 className="font-display font-bold text-light text-base mb-3">{ach.title}</h3>
-              <p className="text-muted text-base font-body leading-relaxed">{ach.desc}</p>
+              <h3 className="font-display font-bold text-light text-base mb-3 relative z-10">{ach.title}</h3>
+              <p className="text-muted text-base font-body leading-relaxed relative z-10">{ach.desc}</p>
             </motion.div>
           ))}
         </div>

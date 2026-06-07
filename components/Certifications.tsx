@@ -29,11 +29,11 @@ export default function Certifications() {
           animate={inView ? { opacity: 1, y: 0 } : {}}
           className="text-center mb-14"
         >
-          <span className="font-mono text-accent text-sm tracking-widest uppercase">What I've Earned</span>
+          <span className="font-mono text-accent text-sm tracking-widest uppercase section-label">What I've Earned</span>
           <h2 className="font-display font-bold text-3xl md:text-4xl text-light mt-3">
             <span className="gradient-text">Certifications</span>
           </h2>          <p className="mt-4 text-muted text-base font-body max-w-2xl mx-auto">
-            Verified credentials spanning AI, cloud infrastructure, development tools, and advanced manufacturing.
+            Verified credentials in AI, cloud computing, development tools, and manufacturing technologies.
           </p>        </motion.div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -42,10 +42,18 @@ export default function Certifications() {
               key={cert.name}
               initial={{ opacity: 0, y: 30 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: i * 0.07 }}
+              transition={{ delay: i * 0.06, duration: 0.5 }}
               whileHover={{ scale: 1.03, y: -5 }}
-              className="glass glow-border rounded-2xl p-5 flex gap-4 items-start group"
+              className="cert-card glass glow-border rounded-2xl p-5 flex gap-4 items-start group relative overflow-hidden"
+              style={{ perspective: '600px' }}
             >
+              {/* Verified checkmark */}
+              <div className="absolute top-2 right-2 w-5 h-5 rounded-full flex items-center justify-center"
+                style={{ background: `${cert.color}20` }}>
+                <span className="text-[10px]" style={{ color: cert.color }}>✓</span>
+              </div>
+              {/* Shimmer overlay */}
+              <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300 holographic-hover" />
               <div
                 className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform"
                 style={{ background: `${cert.color}20` }}

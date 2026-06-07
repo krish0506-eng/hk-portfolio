@@ -6,18 +6,32 @@ import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
 const skillGroups = [
   {
-    category: "Programming",
-    description: "Core languages powering every system",
-    confidence: 95,
-    color: "#8b5cf6",
-    skills: ["Python", "JavaScript", "TypeScript", "Vibe Coding"],
+    category: "Embedded & Hardware",
+    description: "Microcontrollers, PCB design, and electronics assembly",
+    confidence: 92,
+    color: "#10b981",
+    skills: ["Arduino", "ESP8266/ESP32", "PCB Design", "Sensors", "Circuit Wiring", "Electronics Assembly"],
   },
   {
-    category: "App Development",
-    description: "Full-stack web with modern frameworks",
+    category: "Firmware & IoT",
+    description: "Embedded scripting and wireless connectivity",
     confidence: 90,
     color: "#06b6d4",
-    skills: ["React.js", "Next.js", "Node.js", "MERN Stack", "Flutter"],
+    skills: ["Python", "C", "MQTT", "ThingSpeak", "Firebase", "REST APIs", "Embedded Scripting"],
+  },
+  {
+    category: "PLC & Industrial",
+    description: "Industrial control systems fundamentals",
+    confidence: 40,
+    color: "#f59e0b",
+    skills: ["Siemens S7 Basics", "Ladder Logic", "Industrial Control Systems"],
+  },
+  {
+    category: "3D & Manufacturing",
+    description: "Additive and subtractive manufacturing processes",
+    confidence: 92,
+    color: "#a855f7",
+    skills: ["FDM", "SLA", "SLS", "Additive Manufacturing", "Product Design", "Process Optimisation"],
   },
   {
     category: "AI & Automation",
@@ -27,18 +41,25 @@ const skillGroups = [
     skills: ["LLMs", "LangChain", "RAG Systems", "Agentic AI", "Prompt Engineering", "Generative AI"],
   },
   {
+    category: "Programming",
+    description: "Core languages powering every system",
+    confidence: 95,
+    color: "#8b5cf6",
+    skills: ["Python", "JavaScript", "TypeScript", "C", "Dart"],
+  },
+  {
+    category: "App Development",
+    description: "Full-stack web with modern frameworks",
+    confidence: 90,
+    color: "#06b6d4",
+    skills: ["React.js", "Next.js", "Node.js", "MERN Stack", "Flutter"],
+  },
+  {
     category: "Backend & Tools",
     description: "Databases, APIs, and deployment",
     confidence: 85,
     color: "#f59e0b",
     skills: ["Firebase", "MongoDB", "REST APIs", "Git", "Postman", "AWS"],
-  },
-  {
-    category: "Engineering",
-    description: "Hardware design and systems integration",
-    confidence: 92,
-    color: "#10b981",
-    skills: ["Additive Manufacturing", "3D Printing", "Embedded Systems", "IoT", "Mechatronics"],
   },
 ];
 
@@ -84,7 +105,7 @@ export default function Skills() {
         <motion.div initial={{ opacity: 0, y: 30 }} animate={headerInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7 }} className="flex items-end justify-between gap-4 flex-wrap">
           <div>
-            <span className="font-mono text-accent text-sm tracking-widest uppercase">What I Know</span>
+            <span className="font-mono text-accent text-sm tracking-widest uppercase section-label">What I Know</span>
             <h2 className="font-display font-bold text-4xl md:text-5xl text-light mt-2">
               Technical <span className="gradient-text">Skills</span>
             </h2>
@@ -139,25 +160,38 @@ export default function Skills() {
             <div className="mb-4">
               <div className="flex justify-between mb-1.5">
                 <span className="text-xs text-muted font-mono">Proficiency</span>
-                <span className="text-xs font-bold font-mono" style={{ color: group.color }}>{group.confidence}%</span>
+                <span className="text-xs font-bold font-mono inline-flex items-center gap-1.5" style={{ color: group.color }}>
+                  {group.confidence === 40 ? (
+                    <><span className="inline-block animate-spin" style={{ fontSize: 10 }}>⟳</span> Learning</>
+                  ) : `${group.confidence}%`}
+                </span>
               </div>
-              <div className="h-1.5 rounded-full bg-border/40 overflow-hidden">
+              <div className="h-1.5 rounded-full bg-border/40 overflow-hidden relative">
                 <motion.div initial={{ width: 0 }}
                   animate={headerInView ? { width: `${group.confidence}%` } : {}}
-                  transition={{ delay: gi * 0.1 + 0.4, duration: 0.9, ease: "easeOut" }}
-                  className="h-full rounded-full"
-                  style={{ background: `linear-gradient(90deg, ${group.color}, ${group.color}99)` }} />
+                  transition={{ delay: gi * 0.1 + 0.4, duration: 1.2, ease: "easeOut" }}
+                  className="h-full rounded-full relative"
+                  style={{ background: `linear-gradient(90deg, ${group.color}, ${group.color}99)` }}>
+                  {group.confidence > 0 && (
+                    <div className="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full"
+                      style={{ background: group.color, boxShadow: `0 0 6px ${group.color}, 0 0 12px ${group.color}` }} />
+                  )}
+                </motion.div>
               </div>
             </div>
 
+            {/* Vertical accent line */}
+            <div className="absolute left-0 top-4 bottom-4 w-0.5 rounded-full opacity-60"
+              style={{ background: `linear-gradient(180deg, ${group.color}, transparent)`, boxShadow: `0 0 8px ${group.color}40` }} />
+
             {/* Skill tags */}
-            <div className="flex flex-wrap gap-1.5 mt-auto">
+            <div className="flex flex-wrap gap-1.5 mt-auto scrollbar-hide" style={{ overflowX: 'auto' }}>
               {group.skills.map((skill, si) => (
                 <motion.span key={skill}
                   initial={{ opacity: 0, scale: 0.85 }} animate={headerInView ? { opacity: 1, scale: 1 } : {}}
                   transition={{ delay: gi * 0.1 + si * 0.04 + 0.3 }}
-                  className="rounded-full px-2.5 py-1 text-xs font-mono cursor-default"
-                  style={{ border: `1px solid ${group.color}35`, color: group.color, background: `${group.color}10` }}>
+                  className="rounded-full px-2.5 py-1 text-xs font-mono cursor-default transition-all duration-200 hover:scale-105"
+                  style={{ border: `1px solid ${group.color}35`, color: group.color, background: `${group.color}10`, transition: 'transform 0.2s ease, border-color 0.2s ease' }}>
                   {skill}
                 </motion.span>
               ))}

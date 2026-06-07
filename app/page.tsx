@@ -18,10 +18,13 @@ import ThreeBackdrop from "@/components/ThreeBackdrop";
 import ScrollDepthEngine from "@/components/ScrollDepthEngine";
 import AIChatAgent from "@/components/AIChatAgent";
 import SiteLoader from "@/components/SiteLoader";
+import CustomCursor from "@/components/CustomCursor";
+import BackToTop from "@/components/BackToTop";
 
 export default function Home() {
   return (
     <main id="main-content" role="main" aria-label="Portfolio content" className="relative isolate overflow-x-hidden">
+      <CustomCursor />
       <SiteLoader />
       <ThreeBackdrop />
       <ScrollDepthEngine />
@@ -41,6 +44,7 @@ export default function Home() {
       <Contact />
       <Footer />
       <AIChatAgent />
+      <BackToTop />
     </main>
   );
 }

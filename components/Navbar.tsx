@@ -13,8 +13,8 @@ export default function Navbar() {
   const { theme, toggle } = useTheme();
   const { scrollY } = useScroll();
 
-  // Subtle vertical shift of the whole nav as user scrolls
   const navY = useTransform(scrollY, [0, 80], [0, -4]);
+  const logoScale = useTransform(scrollY, [0, 100], [1, 0.9]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
@@ -22,7 +22,6 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Track active section via IntersectionObserver
   useEffect(() => {
     const observers: IntersectionObserver[] = [];
     links.forEach((link) => {
@@ -52,12 +51,15 @@ export default function Navbar() {
       role="navigation"
       aria-label="Primary"
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled ? "glass border-b border-border py-3" : "py-5"
+        scrolled
+          ? "bg-bg/70 backdrop-blur-xl border-b border-border/60 shadow-lg shadow-accent/5 py-2"
+          : "py-5"
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         <motion.div
           whileHover={{ scale: 1.05 }}
+          style={{ scale: logoScale }}
           className="flex items-center gap-3 cursor-pointer"
           role="button"
           tabIndex={0}
@@ -81,7 +83,7 @@ export default function Navbar() {
           >
             HK
           </span>
-          <span className="font-display font-bold text-3xl gradient-text glitch-anim">Hari Krishnaa</span>
+          <motion.span className="font-display font-bold text-3xl gradient-text glitch-anim">Hari Krishnaa</motion.span>
         </motion.div>
 
         <div className="hidden md:flex items-center gap-7">
@@ -99,20 +101,24 @@ export default function Navbar() {
                 style={{ color: isActive ? "rgb(var(--color-accent))" : "rgb(var(--color-muted))" }}
               >
                 {link}
-                {/* Underline — always present for active, slides in on hover */}
-                <motion.span
-                  className="absolute -bottom-1 left-0 h-0.5 rounded-full"
-                  style={{ background: "linear-gradient(90deg, rgb(var(--color-accent)), rgb(var(--color-cyan)))" }}
-                  initial={false}
-                  animate={{ width: isActive ? "100%" : "0%" }}
-                  transition={{ duration: 0.3, ease: "easeOut" }}
-                />
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 rounded-full bg-gradient-to-r from-accent to-cyan group-hover:w-full transition-all duration-300" />
+                {isActive && (
+                  <motion.span
+                    layoutId="nav-active"
+                    className="absolute -bottom-1 left-0 right-0 h-0.5 rounded-full"
+                    style={{
+                      background: "rgb(var(--color-accent))",
+                      boxShadow: "0 0 8px rgb(var(--color-accent)), 0 0 16px rgba(139,92,246,0.3)",
+                    }}
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  />
+                )}
+                {!isActive && (
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 rounded-full bg-accent group-hover:w-full transition-all duration-300" />
+                )}
               </motion.button>
             );
           })}
 
-          {/* ── Neumorphic theme toggle ─────────────────────────────── */}
           <motion.button
             whileTap={{ scale: 0.90 }}
             onClick={toggle}
@@ -148,14 +154,14 @@ export default function Navbar() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => scrollTo("Contact")}
-            className="neu-btn px-6 py-2.5 rounded-full text-base font-body font-medium text-accent hover:text-white hover:bg-accent transition-all duration-300"
+            className="neu-btn px-6 py-2.5 rounded-full text-base font-body font-medium text-accent hover:text-white hover:bg-accent transition-all duration-300 relative"
+            style={{ animation: "hire-pulse 4s ease-in-out infinite" }}
           >
             Hire Me
           </motion.button>
         </div>
 
         <div className="flex md:hidden items-center gap-3">
-          {/* Mobile theme toggle */}
           <motion.button
             whileTap={{ scale: 0.90 }}
             onClick={toggle}
@@ -196,19 +202,23 @@ export default function Navbar() {
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden glass border-t border-border px-6 py-4 flex flex-col gap-4"
+            initial={{ opacity: 0, x: 60 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 60 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="md:hidden glass border-t border-border/60 px-6 py-6 flex flex-col gap-3"
           >
-            {links.map((link) => (
-              <button
+            {links.map((link, i) => (
+              <motion.button
                 key={link}
+                initial={{ opacity: 0, x: 30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: i * 0.08, duration: 0.25 }}
                 onClick={() => scrollTo(link)}
-                className="text-left text-muted hover:text-accent transition-colors font-body"
+                className={`text-left font-body py-2 transition-colors ${activeSection === link ? "text-accent font-semibold" : "text-muted"}`}
               >
                 {link}
-              </button>
+              </motion.button>
             ))}
           </motion.div>
         )}

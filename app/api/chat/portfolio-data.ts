@@ -7,11 +7,11 @@ type KnowledgeEntry = {
 
 const profile = {
   name: "Hari Krishnaa N",
-  role: ["Agentic AI Engineer", "Vibe Coder", "Prompt Engineer", "UI/UX Designer"],
+  role: ["Embedded Systems Builder", "IoT Engineer", "AI Engineer", "Hardware Maker"],
   education:
     "B.E. Mechanical Engineering & Mechatronics with specialization in Additive Manufacturing at SNS College of Engineering, Coimbatore.",
   summary:
-    "Hari builds AI-powered products, modern web experiences, and engineering systems that connect software, automation, and hardware.",
+    "Hari builds embedded systems, IoT devices, and AI-powered products — from PCB design and sensor integration to full-stack applications. Hardware first, software always.",
   founderNote: "Founder and Lead Developer at HYNEX, an MSME-registered tech firm started in 2024.",
 };
 
@@ -19,24 +19,62 @@ const availability =
   "Hari is open to freelance projects, internships, placement roles, full-time work, and idea-to-MVP builds.";
 
 const contact =
-  "Reach Hari at krishnaahari05@gmail.com, LinkedIn at linkedin.com/in/hari-krishnaa-n-, GitHub at github.com/krishnaa-0506, or WhatsApp at +91 6379726858.";
+  "Reach Hari at krishnaahari05@gmail.com, LinkedIn at linkedin.com/in/hari-krishnaa-n, GitHub at github.com/krishnaa-0506, or WhatsApp at +91 6379726858.";
 
 const skillsByGroup = [
   {
-    group: "Software and AI",
-    keywords: ["Next.js", "React", "TypeScript", "Python", "Node.js", "Flutter", "MongoDB", "Firebase"],
+    group: "Embedded & Hardware",
+    keywords: ["Arduino", "ESP8266", "ESP32", "PCB Design", "Sensors", "Circuit Wiring", "Electronics Assembly"],
   },
   {
-    group: "AI Workflow",
+    group: "Firmware & IoT",
+    keywords: ["Python", "C", "MQTT", "ThingSpeak", "Firebase", "REST APIs", "Embedded Scripting"],
+  },
+  {
+    group: "PLC & Industrial",
+    keywords: ["Siemens S7", "Ladder Logic", "Industrial Control Systems"],
+  },
+  {
+    group: "3D & Manufacturing",
+    keywords: ["FDM", "SLA", "SLS", "Additive Manufacturing", "Product Design", "Process Optimisation"],
+  },
+  {
+    group: "AI & Automation",
     keywords: ["LLMs", "LangChain", "RAG Systems", "Agentic AI", "Prompt Engineering", "Generative AI"],
   },
   {
-    group: "Engineering",
-    keywords: ["Additive Manufacturing", "3D Printing", "Embedded Systems", "IoT", "Mechatronics"],
+    group: "Programming",
+    keywords: ["Python", "JavaScript", "TypeScript", "C", "Dart"],
+  },
+  {
+    group: "App Development",
+    keywords: ["React.js", "Next.js", "Node.js", "MERN Stack", "Flutter"],
+  },
+  {
+    group: "Backend & Tools",
+    keywords: ["Firebase", "MongoDB", "REST APIs", "Git", "Postman", "AWS"],
   },
 ];
 
 const projects = [
+  {
+    title: "GoKart Telemetry & 3D Simulation System",
+    aliases: ["gokart telemetry", "gokart 3d", "telemetry simulation", "kart telemetry", "3d simulation system"],
+    answer:
+      "GoKart Telemetry & 3D Simulation System is a full sensor array (speed, temperature, RPM, G-force, pressure) on a go-kart chassis with ESP8266 streaming live telemetry to a cloud dashboard. Includes a 3D simulation of kart dynamics for track performance analysis and real-time fault detection. Achieves sub-second cloud latency across 5 parameters.",
+  },
+  {
+    title: "FitSync — Smart Wearable Health Monitor",
+    aliases: ["fitsync", "fitsync wearable", "smart wearable health", "wearable health monitor"],
+    answer:
+      "FitSync is an end-to-end IoT wearable that monitors SpO2, heart rate, body temperature, and motion. It features custom PCB layout, sensor calibration, ESP8266 wireless transmission, and a Flutter companion app with real-time vitals, trend analytics, and threshold-based health alerts.",
+  },
+  {
+    title: "Industrial Air Quality & Leak Detection Node",
+    aliases: ["industrial air quality", "leak detection", "air quality node", "predictive maintenance iot", "compressed air monitoring"],
+    answer:
+      "Industrial Air Quality & Leak Detection Node is a distributed sensor network monitoring compressed air line pressure, humidity, and flow rate in real time. Uses threshold-based anomaly detection and ML pattern recognition to detect micro-leaks before they become failures, enabling predictive maintenance in industrial environments.",
+  },
   {
     title: "FlowMind AI",
     aliases: ["flowmind", "flowmind ai", "meeting notes", "task automation"],
@@ -157,7 +195,7 @@ const knowledgeEntries: KnowledgeEntry[] = [
   {
     title: "About Hari",
     aliases: ["about him", "who is he", "who is hari", "tell me about him", "tell me something about him", "who's he", "profile", "background", "journey"],
-    answer: `${profile.name} is a ${profile.role.slice(0, 3).join(", ")} and ${profile.role[3]} building AI-powered products, modern web experiences, and engineering systems. ${profile.founderNote} ${profile.education}`,
+    answer: `${profile.name} is an ${profile.role.slice(0, 3).join(", ")} and ${profile.role[3]}. He builds embedded systems, IoT devices, AI products, and full-stack applications — from PCB design to cloud deployment. ${profile.founderNote} ${profile.education}`,
     priority: 6,
   },
   {
@@ -175,14 +213,14 @@ const knowledgeEntries: KnowledgeEntry[] = [
   {
     title: "Skills",
     aliases: ["skill", "skills", "stack", "tech stack", "technology", "tools", "framework", "language", "what can he build"],
-    answer: `Hari works across ${skillsByGroup.map((group) => `${group.group}: ${group.keywords.join(", ")}`).join(". ")}. His stack blends frontend, AI workflows, and hardware systems for real product builds.`,
+    answer: `Hari works across ${skillsByGroup.map((group) => `${group.group}: ${group.keywords.join(", ")}`).join(". ")}. His core strength is hardware-first engineering with AI depth — from PCB design and firmware to generative AI and full-stack apps.`,
     priority: 7,
   },
   {
     title: "Projects Overview",
     aliases: ["project", "projects", "built", "builds", "portfolio", "what projects has he built", "what has he built"],
     answer:
-      "Hari's strongest builds include FlowMind AI, Zero Barrier, Hira v2, Mind Mate, As Always, Lunar Hazard AI, Smart Wearable System, GoKart Telemetry, and Dynamo EV Prototype. Ask for any project name and I’ll give you the short summary.",
+      "Hari's projects span embedded hardware, IoT, AI, and full-stack development. Hardware builds: GoKart Telemetry & 3D Simulation System, FitSync Smart Wearable, Industrial Air Quality Node, Smart Wearable System, GoKart Telemetry, and Dynamo EV Prototype. AI & software: FlowMind AI, Zero Barrier, Hira v2, Mind Mate, As Always, Lunar Hazard AI, and AI Agentic Email System. Ask for any project name and I’ll give you the short summary.",
     priority: 6,
   },
   {

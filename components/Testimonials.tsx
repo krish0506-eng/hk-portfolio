@@ -4,6 +4,21 @@ import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { FiStar, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
+function AvatarCircle({ initials, color }: { initials: string; color: string }) {
+  return (
+    <div
+      className="w-9 h-9 rounded-full flex items-center justify-center font-display font-bold text-xs shrink-0"
+      style={{
+        background: `linear-gradient(135deg, ${color}30, ${color}10)`,
+        border: `1px solid ${color}40`,
+        color,
+      }}
+    >
+      {initials}
+    </div>
+  );
+}
+
 const testimonials = [
   { name: "Anbarasu R.", role: "Startup Founder", avatar: "AR", color: "#8b5cf6", rating: 5, text: "Hari delivered a full AI automation system for our team in under two weeks. The quality was exceptional — he understood the problem deeply before writing a single line of code. Our manual task overhead dropped by 90%." },
   { name: "Sanjay Kumar", role: "Product Lead", avatar: "SK", color: "#06b6d4", rating: 5, text: "The UI Hari built for our app was simply stunning. He has a rare combination of product thinking and technical execution. Every micro-interaction felt intentional. Would hire again without hesitation." },
@@ -56,7 +71,7 @@ export default function Testimonials() {
         <motion.div initial={{ opacity: 0, y: 40 }} animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }} className="flex items-end justify-between gap-4 flex-wrap mb-10">
           <div>
-            <span className="font-mono text-accent text-sm tracking-widest uppercase">Social Proof</span>
+            <span className="font-mono text-accent text-sm tracking-widest uppercase section-label">Social Proof</span>
             <h2 className="font-display font-bold text-4xl md:text-5xl text-light mt-3">
               What Clients <span className="gradient-text">Say</span>
             </h2>
@@ -94,12 +109,15 @@ export default function Testimonials() {
                 <FiStar key={idx} size={13} style={{ color: t.color, fill: t.color }} />
               ))}
             </div>
-            <p className="text-muted text-sm font-body leading-relaxed flex-1">&ldquo;{t.text}&rdquo;</p>
-            <div className="flex items-center gap-3 pt-3 border-t border-border/30">
-              <div className="w-9 h-9 rounded-full flex items-center justify-center font-display font-bold text-xs shrink-0"
-                style={{ background: `${t.color}25`, border: `1px solid ${t.color}40`, color: t.color }}>
-                {t.avatar}
+            <div className="relative flex-1">
+              <div className="absolute -top-2 -left-1 text-6xl font-serif leading-none pointer-events-none select-none"
+                style={{ color: t.color, opacity: 0.06 }}>
+                "
               </div>
+              <p className="text-muted text-sm font-body leading-relaxed relative z-10">&ldquo;{t.text}&rdquo;</p>
+            </div>
+            <div className="flex items-center gap-3 pt-3 border-t border-border/30">
+              <AvatarCircle initials={t.avatar} color={t.color} />
               <div>
                 <p className="text-light font-body font-semibold text-sm">{t.name}</p>
                 <p className="text-muted font-mono text-xs">{t.role}</p>

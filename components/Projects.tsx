@@ -47,6 +47,99 @@ function tightenLine(text: string, max = 130): string {
 
 const projects: Project[] = [
   {
+    title: "GoKart Telemetry & 3D Simulation System",
+    subtitle: "Live Sensor Fusion and Track Performance Simulator",
+    desc: "Designed and assembled a full sensor array (speed, temperature, RPM, G-force, pressure) on a go-kart chassis. ESP8266 streams live telemetry to a cloud dashboard. Built a 3D simulation of kart dynamics for track performance analysis and real-time fault detection.",
+    problem: "Go-kart performance tuning relies on subjective driver feedback and post-session guesswork with no real-time visibility into critical parameters.",
+    solution: "Multi-sensor telemetry unit with ESP8266 streaming, ThingSpeak cloud dashboard, and a 3D simulation engine for real-time track performance analysis and fault detection.",
+    impact: "Real-time sensor fusion across 5 parameters with sub-second cloud latency. Used for performance tuning and anomaly detection on track.",
+    learnings: "Sensor synchronisation and data alignment across multiple sampling rates is the hardest part of multi-parameter telemetry — each sensor has a different latency profile that must be calibrated.",
+    userInsight: "Drivers can't feel what's wrong — they only feel that something is wrong. The system translates vague physical sensations into precise, actionable data points that engineers can tune against.",
+    designProcess: [
+      "Empathise — Observed kart tuning sessions; engineers relied entirely on driver descriptions like 'it felt loose in turn 4'",
+      "Define — Core problem: subjective feel cannot be optimised without objective data across multiple parameters simultaneously",
+      "Ideate — Selected sensor suite: speed, temperature, RPM, G-force, pressure — covering all critical performance dimensions",
+      "Prototype — Assembled sensor array on kart chassis with ESP8266; wrote firmware for data acquisition and WiFi streaming",
+      "Test — Validated data accuracy against reference instruments; achieved sub-second cloud latency",
+      "Iterate — Added 3D simulation layer after engineers asked to visualise kart dynamics during specific track sections",
+    ],
+    tags: ["Arduino", "ESP8266", "Python", "ThingSpeak", "Sensors", "IoT", "Telemetry"],
+    status: "completed",
+    color: "#f97316",
+    glow: "rgba(249, 115, 22, 0.35)",
+    featured: true,
+  },
+  {
+    title: "FitSync — Smart Wearable Health Monitor",
+    subtitle: "End-to-End IoT Wearable with Mobile Dashboard",
+    desc: "Built a wearable IoT device monitoring SpO2, heart rate, body temperature, and motion. Handled PCB layout, sensor calibration, and wireless data transmission. Syncs to a Flutter app with real-time vitals display, trend analytics, and health alerts.",
+    problem: "Consumer wearables track limited metrics and lock data inside closed ecosystems, preventing custom health monitoring and clinical-quality data access.",
+    solution: "Custom PCB with multi-sensor integration, ESP8266-based wireless transmission, and a Flutter companion app with real-time vitals, trends, and threshold-based alerts.",
+    impact: "End-to-end hardware-to-app pipeline — from raw sensor data on PCB to polished mobile UI with live alerts.",
+    learnings: "Sensor calibration is the difference between a toy and a medical-grade device — raw ADC values without proper mapping produce misleading health data.",
+    userInsight: "Users don't just want to see numbers — they want to know when something is wrong. The alert system was designed around threshold breaches rather than raw data display. Context over data.",
+    designProcess: [
+      "Empathise — Interviewed physiotherapy students and health enthusiasts; data trust was the #1 concern with existing wearables",
+      "Define — Core challenge: build a wearable with clinical-grade data quality at consumer-grade usability",
+      "Ideate — Selected sensor suite based on clinical relevance: SpO2 (MAX30100), heart rate, temperature (DS18B20), MPU6050 for motion",
+      "Prototype — Designed PCB layout in EasyEDA, assembled with through-hole and SMD components, wrote ESP8266 firmware",
+      "Test — Validated against hospital-grade pulse oximeter; achieved <3% deviation on SpO2 and heart rate",
+      "Iterate — Added trend analytics after users wanted to see how their vitals changed over days, not just real-time",
+    ],
+    tags: ["ESP8266", "PCB Design", "Sensors", "Flutter", "Firebase", "IoT", "Wearable"],
+    status: "completed",
+    color: "#22c55e",
+    glow: "rgba(34, 197, 94, 0.35)",
+    featured: true,
+  },
+  {
+    title: "Industrial Air Quality & Leak Detection Node",
+    subtitle: "Predictive Maintenance for Compressed Air Systems",
+    desc: "Developed a distributed sensor node network to monitor compressed air line pressure, humidity, and flow rate in real time. Integrated threshold-based anomaly detection and ML pattern recognition. Live dashboard alerts enable predictive maintenance before failures occur.",
+    problem: "Industrial compressed air systems develop micro-leaks that waste energy and cause unplanned downtime — often going undetected for weeks.",
+    solution: "Distributed sensor nodes measuring pressure, humidity, and flow with threshold-based alerts and ML-based anomaly pattern recognition for early leak detection.",
+    impact: "Detects micro-leaks and anomalies before they become failures — reducing downtime in industrial environments.",
+    learnings: "Industrial sensor networks must handle electrical noise, vibration, and temperature extremes — signal conditioning and robust enclosures are as important as the sensing electronics themselves.",
+    userInsight: "Maintenance teams don't need more data — they need fewer emergencies. The system was designed around the principle that a 2% pressure drop warning today is worth more than a full failure report tomorrow.",
+    designProcess: [
+      "Empathise — Shadowed maintenance teams in a manufacturing facility; discovered 60% of downtime was from preventable failures",
+      "Define — Core problem: condition monitoring exists but actionable alerts don't reach the right people in time",
+      "Ideate — Designed distributed node architecture with pressure, humidity, and flow sensors communicating via MQTT",
+      "Prototype — Built first node with Arduino, BMP280 pressure sensor, DHT22 humidity sensor, and YF-S201 flow meter",
+      "Test — Deployed test node on active air line; detected 3 micro-leaks in first week that manual inspection had missed",
+      "Iterate — Added ML anomaly detection after pattern recognition proved more effective than static thresholds alone",
+    ],
+    tags: ["Arduino", "MQTT", "Python", "Sensors", "Predictive Maintenance", "Industrial IoT"],
+    status: "completed",
+    color: "#06b6d4",
+    glow: "rgba(6, 182, 212, 0.35)",
+    featured: true,
+  },
+  {
+    title: "Lunar Hazard AI",
+    subtitle: "AI-Powered Lunar Surface Hazard Detection",
+    desc: "An AI system for detecting and classifying hazards on the lunar surface — craters, boulders, and terrain anomalies — to support safe lunar rover navigation and landing zone selection.",
+    problem: "Lunar surface navigation requires real-time hazard detection; manual analysis of terrain data is too slow for autonomous rover operations.",
+    solution: "Computer vision model trained on lunar imagery to detect, classify, and map surface hazards with spatial accuracy for autonomous navigation systems.",
+    impact: "Demonstrates viable AI-assisted hazard mapping for lunar exploration missions with high detection accuracy on test datasets.",
+    learnings: "Domain-specific training data is scarce for space applications — data augmentation and transfer learning from terrestrial datasets are essential.",
+    userInsight: "The 'user' here is an autonomous rover. Designing for non-human agents requires thinking about failure modes differently — a missed crater isn't a bad UX, it's a mission failure.",
+    designProcess: [
+      "Empathise — Studied NASA rover navigation challenges; identified terrain classification as the critical bottleneck",
+      "Define — Problem: existing models trained on Earth terrain fail on lunar surface characteristics",
+      "Ideate — Explored transfer learning from Mars datasets, synthetic data generation, and domain adaptation",
+      "Prototype — Fine-tuned YOLOv8 on lunar imagery dataset with crater, boulder, and flat terrain classes",
+      "Test — Evaluated on held-out lunar imagery; measured precision/recall for each hazard class",
+      "Iterate — Applied data augmentation (brightness, contrast, rotation) to improve low-light performance",
+    ],
+    tags: ["Python", "Computer Vision", "Deep Learning", "OpenCV", "Space Tech"],
+    status: "completed",
+    color: "#64748b",
+    glow: "rgba(100, 116, 139, 0.35)",
+    featured: true,
+    github: "https://github.com/krishnaa-0506/lunar-hazard-ai",
+  },
+  {
     title: "FlowMind AI",
     subtitle: "Autonomous Multi-Agent Workflow System",
     desc: "Converts meeting inputs into structured, auto-assigned tasks using a multi-agent AI pipeline. Handles task tracking, delay detection, smart reminders, and escalation workflows end-to-end.",
@@ -91,7 +184,7 @@ const projects: Project[] = [
     status: "ongoing",
     color: "#10b981",
     glow: "rgba(16, 185, 129, 0.35)",
-    featured: true,
+    featured: false,
   },
   {
     title: "Hira v2",
@@ -114,7 +207,7 @@ const projects: Project[] = [
     status: "completed",
     color: "#f97316",
     glow: "rgba(249, 115, 22, 0.35)",
-    featured: true,
+    featured: false,
     github: "https://github.com/krishnaa-0506/hira-gym",
   },
   {
@@ -190,30 +283,6 @@ const projects: Project[] = [
     featured: false,
     github: "https://github.com/krishnaa-0506/As-Always",
     demo: "https://asalwayspitchdeck.netlify.app",
-  },
-  {
-    title: "Lunar Hazard AI",
-    subtitle: "AI-Powered Lunar Surface Hazard Detection",
-    desc: "An AI system for detecting and classifying hazards on the lunar surface — craters, boulders, and terrain anomalies — to support safe lunar rover navigation and landing zone selection.",
-    problem: "Lunar surface navigation requires real-time hazard detection; manual analysis of terrain data is too slow for autonomous rover operations.",
-    solution: "Computer vision model trained on lunar imagery to detect, classify, and map surface hazards with spatial accuracy for autonomous navigation systems.",
-    impact: "Demonstrates viable AI-assisted hazard mapping for lunar exploration missions with high detection accuracy on test datasets.",
-    learnings: "Domain-specific training data is scarce for space applications — data augmentation and transfer learning from terrestrial datasets are essential.",
-    userInsight: "The 'user' here is an autonomous rover. Designing for non-human agents requires thinking about failure modes differently — a missed crater isn't a bad UX, it's a mission failure.",
-    designProcess: [
-      "Empathise — Studied NASA rover navigation challenges; identified terrain classification as the critical bottleneck",
-      "Define — Problem: existing models trained on Earth terrain fail on lunar surface characteristics",
-      "Ideate — Explored transfer learning from Mars datasets, synthetic data generation, and domain adaptation",
-      "Prototype — Fine-tuned YOLOv8 on lunar imagery dataset with crater, boulder, and flat terrain classes",
-      "Test — Evaluated on held-out lunar imagery; measured precision/recall for each hazard class",
-      "Iterate — Applied data augmentation (brightness, contrast, rotation) to improve low-light performance",
-    ],
-    tags: ["Python", "Computer Vision", "Deep Learning", "OpenCV", "Space Tech"],
-    status: "completed",
-    color: "#64748b",
-    glow: "rgba(100, 116, 139, 0.35)",
-    featured: false,
-    github: "https://github.com/krishnaa-0506/lunar-hazard-ai",
   },
   {
     title: "Smart Wearable System",
@@ -316,9 +385,28 @@ function StatusBadge({ status }: { status: Project["status"] }) {
   const label = status === "completed" ? "Completed" : "Ongoing";
   const bg = status === "completed" ? "#10b981" : "#f59e0b";
   return (
-    <span className="text-xs font-mono px-2.5 py-1 rounded-full"
+    <span className="text-xs font-mono px-2.5 py-1 rounded-full inline-flex items-center gap-1"
       style={{ background: `${bg}18`, color: bg, border: `1px solid ${bg}35` }}>
-      ● {label}
+      <span className={status === "ongoing" ? "ongoing-pulse inline-block w-1.5 h-1.5 rounded-full" : ""}
+        style={status === "ongoing" ? { background: bg } : {}}>
+        {status === "completed" && "●"}
+      </span>
+      {status === "ongoing" ? "● Ongoing" : label}
+    </span>
+  );
+}
+
+function ProjectTypeBadge({ title }: { title: string }) {
+  const hardwareKeywords = ["GoKart", "FitSync", "Industrial", "Wearable", "Telemetry", "Dynamo", "EV"];
+  const isHardware = hardwareKeywords.some(k => title.includes(k));
+  return (
+    <span className="text-[10px] font-mono px-2 py-0.5 rounded-full"
+      style={{
+        background: isHardware ? "rgba(249,115,22,0.15)" : "rgba(139,92,246,0.12)",
+        color: isHardware ? "#f97316" : "#8b5cf6",
+        border: `1px solid ${isHardware ? "rgba(249,115,22,0.35)" : "rgba(139,92,246,0.3)"}`,
+      }}>
+      {isHardware ? "🔧 Hardware" : "🤖 AI / Software"}
     </span>
   );
 }
@@ -530,12 +618,12 @@ export default function Projects() {
       <div className="max-w-6xl mx-auto">
         <motion.div initial={{ opacity: 0, y: 40 }} animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }} className="text-center mb-12">
-          <span className="font-mono text-accent text-sm tracking-widest uppercase">What I Built</span>
+          <span className="font-mono text-accent text-sm tracking-widest uppercase section-label">What I Built</span>
           <h2 className="font-display font-bold text-3xl sm:text-4xl md:text-5xl text-light mt-3">
             Featured <span className="gradient-text">Projects</span>
           </h2>
           <p className="mt-4 text-muted text-base font-body max-w-2xl mx-auto">
-            Shipped products spanning AI automation, mobile apps, IoT, space tech, and social impact.
+            Hardware, firmware, IoT systems, AI automation, and mobile apps — built from scratch.
           </p>
         </motion.div>
 
@@ -560,8 +648,8 @@ export default function Projects() {
                 <div className="absolute top-0 right-0 w-36 h-36 rounded-full blur-3xl opacity-0 group-hover:opacity-25 transition-opacity duration-500" style={{ background: proj.color }} />
                 <div className="absolute top-0 left-0 right-0 h-px opacity-60" style={{ background: `linear-gradient(90deg, transparent, ${proj.color}, transparent)` }} />
 
-                <div className="mb-5 flex items-center justify-between">
-                  <div className="w-10 h-1 rounded-full" style={{ background: proj.color }} />
+                <div className="mb-3 flex items-start justify-between gap-2">
+                  <ProjectTypeBadge title={proj.title} />
                   <StatusBadge status={proj.status} />
                 </div>
 
@@ -585,9 +673,9 @@ export default function Projects() {
                   )}
                 </div>
 
-                <div className="flex flex-wrap gap-1.5 mt-auto mb-5">
+                <div className="flex gap-1.5 mt-auto mb-5 overflow-x-auto scrollbar-hide" style={{ flexWrap: 'nowrap' }}>
                   {proj.tags.slice(0, 4).map((tag) => (
-                    <span key={tag} className="px-2.5 py-1 rounded-full text-xs font-mono"
+                    <span key={tag} className="px-2.5 py-1 rounded-full text-xs font-mono shrink-0"
                       style={{ background: `${proj.color}12`, color: proj.color, border: `1px solid ${proj.color}28` }}>
                       {tag}
                     </span>
@@ -629,8 +717,12 @@ export default function Projects() {
           <motion.button whileHover={{ scale: 1.04, y: -2 }} whileTap={{ scale: 0.96 }}
             onClick={() => setShowAll(!showAll)}
             className="glass-btn flex items-center gap-2 px-8 py-3.5 rounded-full font-body text-sm font-medium">
-            {showAll ? "Show Less" : `View All ${projects.length} Projects`}
-            <motion.span animate={{ rotate: showAll ? 180 : 0 }} transition={{ duration: 0.3 }}>
+            <span>{showAll ? "Show Less" : `View All ${projects.length} Projects`}</span>
+            <motion.span
+              animate={{ rotate: showAll ? 180 : 0, x: showAll ? 0 : 4 }}
+              transition={{ duration: 0.3 }}
+              className="group-hover:translate-x-1 transition-transform"
+            >
               <FiChevronDown />
             </motion.span>
           </motion.button>

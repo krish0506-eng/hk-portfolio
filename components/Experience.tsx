@@ -1,9 +1,25 @@
 "use client";
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { FiBriefcase } from "react-icons/fi";
 
 const experiences = [
+  {
+    role: "Electronics Intern",
+    company: "Salzer Industrial Controls",
+    type: "Industrial Electronics & Control Systems",
+    period: "Internship",
+    color: "#ffd700",
+    learning: "Learned industrial-grade PCB testing, circuit debugging, and the gap between academic circuits and production electronics.",
+    points: [
+      "Performed PCB assembly, soldering, and functional testing of industrial control boards",
+      "Troubleshot circuit failures using multimeters, oscilloscopes, and systematic debug protocols",
+      "Assisted in quality inspection of electronic components and assembled PCBs",
+      "Worked on relay logic panels and understood industrial control system architecture",
+      "Gained hands-on experience with wiring looms, terminal blocks, and panel integration",
+    ],
+  },
   {
     role: "Founder & Lead Developer",
     company: "HYNEX",
@@ -29,6 +45,7 @@ const experiences = [
       "Observed and supported end-to-end production line and manufacturing workflows",
       "Assisted in quality inspection, process monitoring, and production planning",
       "Applied core mechanical engineering principles in a live industrial environment",
+      "Studied lean manufacturing practices and waste reduction techniques on the shop floor",
       "Gained exposure to equipment handling, safety standards, and factory operations",
     ],
   },
@@ -58,22 +75,16 @@ const experiences = [
       "Developed hands-on understanding of generative AI tools and workflows",
     ],
   },
-  {
-    role: "Electronics Intern",
-    company: "Salzer Industrial Controls",
-    type: "Industrial Electronics",
-    period: "Internship",
-    color: "#ffd700",
-    learning: "Gained practical knowledge of PCB design, circuit testing, and industrial control systems.",
-    points: [
-      "Worked on circuit wiring, PCB testing, and quality inspection",
-      "Gained hands-on exposure to industrial electronics and manufacturing",
-    ],
-  },
 ];
 
 export default function Experience() {
   const [ref, inView] = useInView({ threshold: 0.1, triggerOnce: true });
+  const timelineRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: timelineRef,
+    offset: ["start 60px", "end 60px"],
+  });
+  const lineHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
   return (
     <section id="experience" ref={ref} className="py-14 md:py-16 px-6">
@@ -83,7 +94,7 @@ export default function Experience() {
           animate={inView ? { opacity: 1, y: 0 } : {}}
           className="text-center mb-10"
         >
-          <span className="font-mono text-accent text-sm tracking-widest uppercase">Where I've Worked</span>
+          <span className="font-mono text-accent text-sm tracking-widest uppercase section-label">Where I've Worked</span>
           <h2 className="font-display font-bold text-4xl md:text-5xl text-light mt-3">
             <span className="gradient-text">Experience</span>
           </h2>
@@ -92,18 +103,26 @@ export default function Experience() {
           </p>
         </motion.div>
 
-        <div className="relative">
-          <div className="absolute left-6 top-0 bottom-0 w-px bg-gradient-to-b from-accent via-cyan to-pink opacity-30" />
+        <div ref={timelineRef} className="relative">
+          {/* Animated timeline line */}
+          <motion.div
+            className="absolute left-6 top-0 w-px bg-gradient-to-b from-accent via-cyan to-pink"
+            style={{ height: lineHeight, opacity: 0.5 }}
+          />
 
           {experiences.map((exp, i) => (
             <motion.div
               key={exp.company}
-              initial={{ opacity: 0, x: -40 }}
+              initial={{ opacity: 0, x: 40 }}
               animate={inView ? { opacity: 1, x: 0 } : {}}
-              transition={{ delay: i * 0.15 }}
+              transition={{ delay: i * 0.15, duration: 0.6 }}
               className="relative pl-16 pb-9 group"
             >
-              <div
+              {/* Connector dot */}
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={inView ? { scale: 1 } : {}}
+                transition={{ delay: i * 0.15 + 0.2, type: "spring", stiffness: 300 }}
                 className="absolute left-3.5 top-1 w-5 h-5 rounded-full border-2 border-bg transition-transform group-hover:scale-125"
                 style={{ background: exp.color, borderColor: exp.color, boxShadow: `0 0 12px ${exp.color}` }}
               />
@@ -115,7 +134,11 @@ export default function Experience() {
                 <div className="flex flex-wrap items-start justify-between gap-3 mb-3">
                   <div>
                     <h3 className="font-display font-bold text-lg text-light">{exp.role}</h3>
-                    <p className="font-mono text-base" style={{ color: exp.color }}>{exp.company}</p>
+                    <motion.p
+                      whileHover={{ color: exp.color }}
+                      className="font-mono text-base transition-colors duration-300"
+                      style={{ color: exp.color }}
+                    >{exp.company}</motion.p>
                     <p className="text-muted text-sm font-body mt-0.5">{exp.type}</p>
                   </div>
                   <span className="px-3 py-1 rounded-full text-sm font-mono glass" style={{ color: exp.color, border: `1px solid ${exp.color}40` }}>
@@ -131,8 +154,9 @@ export default function Experience() {
                   ))}
                 </ul>
 
-                {/* Key Learning (Idea 94) */}
-                <div className="pt-4 border-t border-border/30">
+                {/* Key Learning */}
+                <div className="pt-4 border-t border-border/30 pl-4 ml-1"
+                  style={{ borderLeft: `2px solid ${exp.color}40`, background: `${exp.color}04` }}>
                   <p className="text-xs font-mono text-muted mb-1 uppercase tracking-wider opacity-70">Key Learning</p>
                   <p className="text-sm text-light font-body">{exp.learning}</p>
                 </div>

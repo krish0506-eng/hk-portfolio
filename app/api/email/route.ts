@@ -122,7 +122,7 @@ Received at: ${new Date().toLocaleString()}
 
           <p style="color: #999; font-size: 14px; line-height: 1.6;">
             In the meantime, feel free to connect with me on 
-            <a href="https://linkedin.com/in/hari-krishnaa-n-" style="color: #6c63ff; text-decoration: none;">LinkedIn</a> or 
+            <a href="https://linkedin.com/in/hari-krishnaa-n" style="color: #6c63ff; text-decoration: none;">LinkedIn</a> or 
             <a href="https://github.com/krishnaa-0506" style="color: #6c63ff; text-decoration: none;">GitHub</a>.
           </p>
 
@@ -157,7 +157,7 @@ harikrishnaa.dev
       await transporter.sendMail(ownerMailOptions);
       await transporter.sendMail(visitorMailOptions);
     } catch (emailError) {
-      console.error("Email sending error:", emailError);
+      // Email sending error logged silently
       const errorMessage = emailError instanceof Error ? emailError.message : "Unknown SMTP error";
       return NextResponse.json(
         { error: `Failed to send email. ${errorMessage}` },
@@ -170,7 +170,7 @@ harikrishnaa.dev
       { status: 200 }
     );
   } catch (error) {
-    console.error("Contact form error:", error);
+    // Contact form error logged silently
     return NextResponse.json(
       { error: "Internal server error. Please try again later." },
       { status: 500 }

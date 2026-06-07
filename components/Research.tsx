@@ -299,12 +299,12 @@ export default function Research() {
       <div className="max-w-6xl mx-auto">
         <motion.div initial={{ opacity: 0, y: 40 }} animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }} className="text-center mb-12">
-          <span className="font-mono text-accent text-sm tracking-widest uppercase">Academic Work</span>
+          <span className="font-mono text-accent text-sm tracking-widest uppercase section-label">Academic Work</span>
           <h2 className="font-display font-bold text-4xl md:text-5xl text-light mt-3">
             Research <span className="gradient-text">Projects</span>
           </h2>
           <p className="mt-4 text-muted text-base font-body max-w-2xl mx-auto">
-            Engineering research spanning sustainable energy, circular economy, and advanced manufacturing.
+            Academic research on sustainable energy, circular economy, additive manufacturing, and smart systems.
           </p>
         </motion.div>
 
@@ -331,7 +331,10 @@ export default function Research() {
                       <Icon size={22} style={{ color: r.color }} />
                     </div>
                     <div className="flex-1">
-                      <p className="font-mono text-xs uppercase tracking-widest mb-1" style={{ color: r.color }}>{r.area}</p>
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="font-mono text-[10px] px-1.5 py-0.5 rounded-sm" style={{ background: `${r.color}15`, color: r.color }}>📄 Research</span>
+                        <p className="font-mono text-xs uppercase tracking-widest" style={{ color: r.color }}>{r.area}</p>
+                      </div>
                       <h3 className="font-display font-bold text-lg text-light leading-snug">{r.title}</h3>
                     </div>
                     <span className="ml-auto shrink-0 text-xs font-mono px-2.5 py-1 rounded-full"

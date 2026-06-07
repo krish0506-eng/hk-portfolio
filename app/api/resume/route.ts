@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
   const publicDir = path.join(process.cwd(), "public");
-  const candidates = ["HARI KRISHNAA.pdf", "resume.pdf"];
+  const candidates = ["HARI KRISHNAA.pdf", "resume.pdf", "Hari krishnaa Resume .pdf"];
 
   try {
     let selected: { name: string; data: Buffer } | null = null;
