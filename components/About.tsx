@@ -5,7 +5,7 @@ import { FiCode, FiCpu, FiZap, FiGlobe } from "react-icons/fi";
 import { useCounter } from "@/lib/useCounter";
 
 const stats = [
-  { label: "CGPA", value: "8" },
+  { label: "CGPA", value: "8.5" },
   { label: "Certifications", value: "12+" },
   { label: "Systems Built", value: "20+" },
   { label: "Tech Domains", value: "4" },
@@ -62,7 +62,7 @@ export default function About() {
         >
           {/* Metric-driven opening (Idea 6) */}
           <p className="text-accent font-body font-bold text-base mb-4">
-            🎯 Built 20+ systems — from ESP32 firmware to full-stack AI products — while maintaining 8/10 CGPA and running HYNEX.
+            🎯 Built 20+ systems — from ESP32 firmware to full-stack AI products — while maintaining 8.5/10 CGPA and running HYNEX.
           </p>
 
           <p className="text-muted text-lg leading-relaxed font-body mb-5">
